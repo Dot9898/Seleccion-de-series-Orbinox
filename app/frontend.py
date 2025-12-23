@@ -294,7 +294,7 @@ if st.session_state['selected_segment'] == 'mine':
 
     with diagram_column:
         mine_diagram = st.session_state['images']['mine_diagram']
-        html = click_detector(make_interactive_image(mine_diagram))
+        html = make_interactive_image(mine_diagram)
         zone = click_detector(html)
         zone = zone.replace('_', ' ')
         if zone == '':
