@@ -171,6 +171,7 @@ def generate_segment_buttons():
         st.image(st.session_state['images']['pulpa_y_papel'], 
                  width = 'stretch')
 
+@st.cache_data
 def make_interactive_image(mine_image): #agregar parámetros de cuadriláteros y dimensiones
 
     zones_svg = format_points_into_html_containers()
@@ -270,11 +271,13 @@ defaults['selected_segment'] = None
 defaults['go_back'] = False
 defaults['rerun'] = False
 defaults['selected_zone'] = None
+defaults['first_run'] = True
 init_session_state(defaults)
 
 if st.session_state['go_back']:
     st.session_state['selected_segment'] = None
     st.session_state['go_back'] = False
+
 
 
 #Frontend
@@ -291,7 +294,8 @@ if st.session_state['selected_segment'] == 'mine':
 
     with diagram_column:
         mine_diagram = st.session_state['images']['mine_diagram']
-        zone = click_detector(make_interactive_image(mine_diagram))
+        html = click_detector(make_interactive_image(mine_diagram))
+        zone = click_detector(html)
         zone = zone.replace('_', ' ')
         if zone == '':
             zone = None
@@ -325,7 +329,10 @@ if st.session_state['selected_segment'] == 'paper':
     with data_column:
         generate_go_back_button()
 
-
+if st.session_state['first_run']: #Preload the cache
+    mine_image = st.session_state['images']['mine_diagram']
+    html = make_interactive_image(mine_image)
+    st.session_state['first_run'] = False
 
 if st.session_state['rerun']: #Reruns on some selections, to avoid input lag
     st.session_state['rerun'] = False
