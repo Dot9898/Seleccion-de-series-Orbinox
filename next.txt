@@ -1,0 +1,11 @@
+
+-Renombrar materiales y hacer que aparezcan solo cuando corresponda
+-Agregar selección del material de mangón y tajadera según las condiciones de trabajo (basándose en el Excel de Gonzalo)
+-Agregar el PDF descargable
+-Agregar leaching y pulpa y papel
+
+
+-Precisar collision masks de las partes de la mina
+-La versión en la nube corre un poco lento en la primera carga... Es solucionable
+-Hacerlo compatible en pantallas pequeñas y teléfonos, eso queda para el final
+-Ajustar alineamientos, tamaño de letra, colores, básicamente que quede bonito / tamaño letra botones
