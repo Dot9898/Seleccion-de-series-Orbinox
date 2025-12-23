@@ -5,9 +5,7 @@ from pathlib import Path
 from PIL import Image
 import base64
 from io import BytesIO
-import plotly.graph_objects as go
 import streamlit as st
-from streamlit.components.v1 import html
 from st_clickable_images import clickable_images
 from st_click_detector import click_detector
 
@@ -39,6 +37,39 @@ def init_session_state(defaults):
     for key in defaults:
         if key not in st.session_state:
             st.session_state[key] = defaults[key]
+
+def valve_selection(zone, pressure, fluid):
+
+    if pressure is None:
+        pressure = 10
+
+    if pressure == 50:
+        return('HG 50')
+    
+    if pressure == 20:
+        return('HG 20')
+    
+    if pressure == 16:
+        if fluid == f'Relaves >50% sólidos':
+            return('WG 16')
+        if fluid == f'Relaves <50% sólidos':
+            return('VG 16')
+        if zone in ['Molienda', 'Espesamiento', 'Filtrado', 'Transporte de relaves']:
+            return('WG 16')
+        if zone in ['Hidrociclones', 'Flotación']:
+            return('VG 16')
+        
+    if pressure == 10:
+        if fluid == f'Relaves >50% sólidos':
+            return('WG')
+        if fluid == f'Relaves <50% sólidos':
+            return('VG')
+        if zone in ['Molienda', 'Espesamiento', 'Filtrado']:
+            return('WG')
+        if zone in ['Hidrociclones', 'Flotación', 'Transporte de relaves']:
+            return('VG')
+    
+    return(None)
 
 def format_points_into_html_containers():
     all_x = [3517, 3734, 3882, 3700, 4224, 4320, 4612, 4555, 4399, 4711, 5076, 5175, 4795, 4430, 3240, 3012, 3323, 3567, 2118, 2719, 2723, 2662, 2088, 3734, 1928, 2034, 3840]
@@ -118,8 +149,6 @@ def generate_title_and_logo():
                     </div>
                     """,
                     unsafe_allow_html=True)
-    
-    st.write('')
 
 def generate_segment_buttons():
     mine_column, paper_column = st.columns([1, 1])
@@ -206,7 +235,7 @@ def generate_dropdowns():
     
     with fluid_column:
         st.selectbox('Fluido', 
-                    ['Agua con sólidos', 'Agua de mar', 'Concentrado de cobre', 'Relaves espesados', f'Relaves <50% sólidos', f'Relave >50% sólidos', 'Trazas de hidrocarburos'], 
+                    ['Agua con sólidos', 'Agua de mar', 'Concentrado de cobre', f'Relaves <50% sólidos', f'Relaves >50% sólidos', 'Trazas de hidrocarburos'], 
                     index = None, 
                     label_visibility = 'collapsed', 
                     accept_new_options = False, 
@@ -240,7 +269,7 @@ defaults = {}
 defaults['selected_segment'] = None
 defaults['go_back'] = False
 defaults['rerun'] = False
-defaults['clicked_region'] = None
+defaults['selected_zone'] = None
 init_session_state(defaults)
 
 if st.session_state['go_back']:
@@ -262,7 +291,11 @@ if st.session_state['selected_segment'] == 'mine':
 
     with diagram_column:
         mine_diagram = st.session_state['images']['mine_diagram']
-        st.session_state['clicked_region'] = click_detector(make_interactive_image(mine_diagram))
+        zone = click_detector(make_interactive_image(mine_diagram))
+        zone = zone.replace('_', ' ')
+        if zone == '':
+            zone = None
+        st.session_state['selected_zone'] = zone
     
     with data_column:
         st.markdown(f"<div style='height: {DATA_COLUMN_SPACING}px;'></div>", unsafe_allow_html=  True)
@@ -274,6 +307,14 @@ if st.session_state['selected_segment'] == 'mine':
         
         with go_back_column:
             generate_go_back_button()
+        
+        zone = st.session_state['selected_zone']
+        pressure = st.session_state['pressure']
+        fluid = st.session_state['fluid']
+        valve = valve_selection(zone, pressure, fluid)
+        if zone is not None and valve is not None:
+            st.subheader(zone)
+            st.subheader(valve)
 
 if st.session_state['selected_segment'] == 'paper':
     diagram_column, data_column = st.columns([1, 1])

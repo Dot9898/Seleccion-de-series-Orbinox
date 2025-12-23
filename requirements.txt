@@ -1,0 +1,4 @@
+pillow
+streamlit
+st_clickable_images
+st_click_detector
