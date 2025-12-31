@@ -1,15 +1,14 @@
 
--Renombrar materiales y hacer que aparezcan solo cuando corresponda
--Agregar selección del material de mangón y tajadera según las condiciones de trabajo (basándose en el Excel de Gonzalo)
--Disclaimer
--Agregar el ''Elegir sector de la mina, fluido, y presión de trabajo''
+
+-Cambiar color texto?
 -Agregar el PDF descargable
--Agregar leaching y pulpa y papel
+-Agregar pulpa y papel
 
 
--Precisar collision masks de las partes de la mina
+-Pasar coordenadas imágenes de un csv. Usar pandas
 -La versión en la nube corre un poco lento en la primera carga... Es solucionable
 -Añadir segundas opciones?
 -Hacerlo compatible en pantallas pequeñas y teléfonos, eso queda para el final
 -Cambiar lenguaje foto? O eliminar texto
 -Ajustar alineamientos, tamaño de letra, colores, básicamente que quede bonito / tamaño letra botones
+
