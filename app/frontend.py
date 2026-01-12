@@ -147,6 +147,7 @@ def mangon_selection(fluid):
     
     return(None)
 
+@st.cache_data
 def get_zones_svg_string(zones_points, zones_wrapper_points):
     fragments = []
 
