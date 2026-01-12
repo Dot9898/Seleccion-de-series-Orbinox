@@ -18,6 +18,9 @@ BACK_ARROW_HEIGHT_STRING = f'{BACK_ARROW_HEIGHT}px'
 DATA_COLUMN_SPACING = 24
 EMPTY_STATE_PANEL_UPPER_SPACING = 20 + 15
 EMPTY_STATE_PANEL_LOWER_SPACING = 20
+VALVE_LINKS = {'VG': 'https://www.orbinox.cl/productos-orbinox/valvulas-de-guillotina/valvula-de-guillotina-para-pulpa', 
+               'WG': 'https://www.orbinox.cl/productos-orbinox/valvulas-de-guillotina/valvula-de-guillotina-para-pulpa-de-condiciones-severas', 
+               'HG': 'https://www.orbinox.cl/productos-orbinox/valvulas-de-guillotina/valvula-de-guillotina-para-pulpa-de-alta-presion'}
 
 #diagram_x = 5388
 #diagram_y = 3404
@@ -41,7 +44,6 @@ FLUID_OPTIONS_MINE = {'Molienda': ['Pulpa con agua', 'Pulpa con agua de mar', 'P
                       'Relaves': [f'Relaves, menos de 50% sólidos', f'Relaves, más de 50% sólidos'], 
                       '': [], 
                       None: []}
-
 
 #Utilities
 
@@ -102,12 +104,25 @@ def valve_selection(zone, pressure, fluid):
     
     return(None)
 
+def available_diameters_as_string(valve):
+    if valve is None:
+        return(None)
+    
+    valve_name = valve[:2]
+
+    if valve_name == 'VG':
+        return('2" a 36" in. / 50 a 900 mm')
+    if valve_name in ['WG', 'HG']:
+        return('3" a 36" in. / 75 a 900 mm')
+    
+    return(None)
+
 def tajadera_selection(pressure, fluid):
     if fluid is None or pressure is None:
         return(None)
     
     if fluid == 'Pulpa con agua de mar':
-        return('Súperduplex')
+        return('Superdúplex')
     
     if fluid in ['Concentrado de cobre', 'Pulpa con agua', 'Pulpa con trazas de hidrocarburos', f'Relaves, menos de 50% sólidos', f'Relaves, más de 50% sólidos']:
         if pressure == 10:
@@ -161,6 +176,7 @@ def get_zones_svg_string(zones_points, zones_wrapper_points):
 
     return(('\n').join(fragments))
 
+@st.cache_data
 def add_selected_zone_to_html(selected_zone):
     if selected_zone is None:
         return('')
@@ -388,11 +404,17 @@ def print_selected_series():
     valve = valve_selection(zone, pressure, fluid)
     tajadera = tajadera_selection(pressure, fluid)
     mangon = mangon_selection(fluid)
+    diameters = available_diameters_as_string(valve)
     if None not in [zone, valve, tajadera, mangon]:
         st.subheader(zone)
         st.write('Serie recomendada:', valve)
-        st.write('Material de mangón:', mangon)
+        st.write('Material de mangón:', mangon + '*' if mangon == 'Nitrilo' else mangon)
         st.write('Material de tajadera:', tajadera)
+        if mangon == 'Nitrilo':
+            st.caption('*Caucho natural para porcentajes pequeños de hidrocarburos')
+        st.write('')
+        st.write('')
+        st.caption('Diámetros disponibles: ' + diameters + '  \n' + '*DN superiores bajo consulta')
         return(True)
     else:
         return(False)
@@ -442,7 +464,8 @@ if st.session_state['selected_segment'] == 'mine':
             mine_diagram = st.session_state['images']['mine_diagram']
         else:
             mine_diagram = st.session_state['images']['mine_diagram_light']
-        html = make_interactive_image(mine_diagram, 'mine') + add_selected_zone_to_html(st.session_state['selected_zone'])
+        html = make_interactive_image(mine_diagram, 'mine')
+        html = html + add_selected_zone_to_html(st.session_state['selected_zone'])
         zone = click_detector(html)
         zone = zone.replace('_', ' ')
         if zone == '':
@@ -477,12 +500,11 @@ if st.session_state['selected_segment'] == 'paper':
 if not st.session_state['is_cache_loaded']: #Preload the cache
     mine_image = st.session_state['images']['mine_diagram']
     html = make_interactive_image(mine_image, 'mine')
-    st.session_state['is_cache_loaded'] = False
+    st.session_state['is_cache_loaded'] = True
 
 if st.session_state['rerun']: #Reruns on some selections, to avoid input lag
     st.session_state['rerun'] = False
     st.rerun()
-
 
 
 
