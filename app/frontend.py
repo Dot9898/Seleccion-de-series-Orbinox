@@ -61,8 +61,8 @@ def load_images():
     images = {}
     images['logo'] = Image.open(IMG_PATH / 'Orbinox_logo.png')
     images['logo_b64'] = img_to_base64(Image.open(IMG_PATH / 'Orbinox_logo.png'))
-    images['mine_diagram_path'] = '/static/mine_diagram.png'
-    images['mine_diagram_light_path'] = '/static/mine_diagram_light.png'
+    images['mine_diagram_path'] = '/app/static/mine_diagram.png'
+    images['mine_diagram_light_path'] = '/app/static/mine_diagram_light.png'
     images['mineria'] = Image.open(IMG_PATH / 'mineria.jpg')
     images['mineria_b64'] = img_to_base64(Image.open(IMG_PATH / 'mineria.jpg'))
     images['pulpa_y_papel'] = Image.open(IMG_PATH / 'pulpa_y_papel.jpg')
