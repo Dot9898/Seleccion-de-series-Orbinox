@@ -49,26 +49,21 @@ FLUID_OPTIONS_MINE = {'Molienda': ['Pulpa con agua', 'Pulpa con agua de mar', 'P
 
 def img_to_base64(img):
     buffer = BytesIO()
-    img.save(buffer, format="PNG")
-    return(base64.b64encode(buffer.getvalue()).decode())
-
-def img_to_base64_webp(img):
-    buffer = BytesIO()
     img.save(buffer, format="WEBP")
     return(base64.b64encode(buffer.getvalue()).decode())
 
 def load_images():
     images = {}
-    images['logo'] = Image.open(IMG_PATH / 'Orbinox_logo.png')
-    images['logo_b64'] = img_to_base64(Image.open(IMG_PATH / 'Orbinox_logo.png'))
-    images['mine_diagram_path'] = '/app/static/mine_diagram.webp'
-    images['mine_diagram_light_path'] = '/app/static/mine_diagram_light.webp'
-    images['mineria'] = Image.open(IMG_PATH / 'mineria.jpg')
-    images['mineria_b64'] = img_to_base64(Image.open(IMG_PATH / 'mineria.jpg'))
-    images['pulpa_y_papel'] = Image.open(IMG_PATH / 'pulpa_y_papel.jpg')
-    images['pulpa_y_papel_b64'] = img_to_base64(Image.open(IMG_PATH / 'pulpa_y_papel.jpg'))
-    images['go_back'] = img_to_base64(Image.open(IMG_PATH / 'back_arrow.png'))
-    images['left_arrow'] = Image.open(IMG_PATH / 'left_arrow.png')
+    images['logo'] = Image.open(IMG_PATH / 'Orbinox_logo.webp')
+    images['logo_b64'] = img_to_base64(Image.open(IMG_PATH / 'Orbinox_logo.webp'))
+    images['mine_diagram'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram.webp'))
+    images['mine_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram_light.webp'))
+    images['mineria'] = Image.open(IMG_PATH / 'mineria.webp')
+    images['mineria_b64'] = img_to_base64(Image.open(IMG_PATH / 'mineria.webp'))
+    images['pulpa_y_papel'] = Image.open(IMG_PATH / 'pulpa_y_papel.webp')
+    images['pulpa_y_papel_b64'] = img_to_base64(Image.open(IMG_PATH / 'pulpa_y_papel.webp'))
+    images['go_back'] = img_to_base64(Image.open(IMG_PATH / 'back_arrow.webp'))
+    images['left_arrow'] = Image.open(IMG_PATH / 'left_arrow.webp')
     return(images)
 
 def init_session_state(defaults):
@@ -248,7 +243,7 @@ def generate_title_and_logo():
                         align-items: flex-end;
                         height: 122px;
                     ">
-                        <img src="data:image/png;base64,{logo}" width="{LOGO_WIDTH}">
+                        <img src="data:image/webp;base64,{logo}" width="{LOGO_WIDTH}">
                     </div>
                     """,
                     unsafe_allow_html=True)
@@ -263,7 +258,7 @@ def generate_segment_buttons():
                 on_click = set_selected_segment, 
                 args = ['mine'])
 
-        mine_image_URL = [f"data:image/png;base64,{st.session_state['images']['mineria_b64']}"]
+        mine_image_URL = [f"data:image/webp;base64,{st.session_state['images']['mineria_b64']}"]
         mine_image_index = clickable_images([mine_image_URL], 
                                             div_style = {"display": "flex", "justify-content": "center"}, 
                                             img_style = {"cursor": "pointer", "width": "100%", "border-radius": "8px"})
@@ -279,7 +274,7 @@ def generate_segment_buttons():
                 on_click = set_selected_segment, 
                 args = ['paper'])
 
-        paper_image_URL = [f"data:image/png;base64,{st.session_state['images']['pulpa_y_papel_b64']}"]
+        paper_image_URL = [f"data:image/webp;base64,{st.session_state['images']['pulpa_y_papel_b64']}"]
         paper_image_index = clickable_images([paper_image_URL], 
                                             div_style = {"display": "flex", "justify-content": "center"}, 
                                             img_style = {"cursor": "pointer", "width": "100%", "border-radius": "8px"})
@@ -288,7 +283,7 @@ def generate_segment_buttons():
             st.session_state['rerun'] = True
 
 @st.cache_data
-def make_interactive_image(diagram_path, type: str): #agregar parámetros de cuadriláteros y dimensiones
+def make_interactive_image(diagram, type: str): #agregar parámetros de cuadriláteros y dimensiones
 
     if type == 'mine':
         zones_points = ZONES_POINTS_MINE
@@ -317,11 +312,11 @@ def make_interactive_image(diagram_path, type: str): #agregar parámetros de cua
             >
 
                 <image
-                    href="{diagram_path}"
+                    href="data:image/webp;base64,{diagram}"
                     x="0"
                     y="0"
-                    width="{diagram_x}"
-                    height="{diagram_y}"
+                    width = {diagram_x}
+                    height = {diagram_y}
                 />
 
                 {zones_svg}
@@ -375,7 +370,7 @@ def generate_dropdowns():
 
 def generate_go_back_button():
     back_arrow_img_b64 = st.session_state['images']['go_back']
-    back_arrow_img = f'data:image/png;base64,{back_arrow_img_b64}'
+    back_arrow_img = f'data:image/webp;base64,{back_arrow_img_b64}'
     clicked_image_index = clickable_images([back_arrow_img], 
                                             titles = ['Volver'], 
                                             div_style = {'display': 'flex', 'justify-content': 'flex-end'}, 
@@ -439,7 +434,7 @@ defaults['selected_segment'] = None
 defaults['go_back'] = False
 defaults['rerun'] = False
 defaults['selected_zone'] = None
-defaults['is_cache_loaded'] = True
+defaults['is_cache_loaded'] = False
 defaults['show_disclaimer'] = True
 init_session_state(defaults)
 
@@ -467,9 +462,9 @@ if st.session_state['selected_segment'] == 'mine':
 
     with diagram_column:
         if st.session_state['selected_zone'] is None:
-            mine_diagram = st.session_state['images']['mine_diagram_path']
+            mine_diagram = st.session_state['images']['mine_diagram']
         else:
-            mine_diagram = st.session_state['images']['mine_diagram_light_path']
+            mine_diagram = st.session_state['images']['mine_diagram_light']
         html = make_interactive_image(mine_diagram, 'mine')
         html = html + add_selected_zone_to_html(st.session_state['selected_zone'])
         zone = click_detector(html)

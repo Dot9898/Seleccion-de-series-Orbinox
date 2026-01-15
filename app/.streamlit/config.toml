@@ -14,9 +14,6 @@ secondaryBackgroundColor = '#66c6f3fa'
 baseFontSize = 16
 baseFontWeight = 500
 
-[server]
-enableStaticServing = true
-
 
 
 
