@@ -9,13 +9,8 @@ import streamlit as st
 from st_clickable_images import clickable_images
 from st_click_detector import click_detector
 
-
 ROOT_PATH = Path(__file__).resolve().parent.parent
 IMG_PATH = ROOT_PATH / 'img'
-STATIC_PATH = ROOT_PATH / 'app' / 'static'
-#BROWSER_RUNTIME_BASE_PATH = st.get_option("server.baseUrlPath")
-
-
 EMPTY_SPACE = '‎'
 LOGO_WIDTH = 200
 BACK_ARROW_HEIGHT = 40
@@ -61,8 +56,8 @@ def load_images():
     images = {}
     images['logo'] = Image.open(IMG_PATH / 'Orbinox_logo.png')
     images['logo_b64'] = img_to_base64(Image.open(IMG_PATH / 'Orbinox_logo.png'))
-    images['mine_diagram_path'] = '/app/static/mine_diagram.png'
-    images['mine_diagram_light_path'] = '/app/static/mine_diagram_light.png'
+    images['mine_diagram'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram.png'))
+    images['mine_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram_light.png'))
     images['mineria'] = Image.open(IMG_PATH / 'mineria.jpg')
     images['mineria_b64'] = img_to_base64(Image.open(IMG_PATH / 'mineria.jpg'))
     images['pulpa_y_papel'] = Image.open(IMG_PATH / 'pulpa_y_papel.jpg')
@@ -189,7 +184,7 @@ def add_selected_zone_to_html(selected_zone):
 
     zone_id = selected_zone.replace(" ", "_")
 
-    #rgba(255,80,0,0.95) orange
+    # rgba(255,80,0,0.95) orange
     extra_html = f"""
                 <style>
                 #{zone_id}.zone-group .zone-visual {{
@@ -287,7 +282,8 @@ def generate_segment_buttons():
             set_selected_segment('paper')
             st.session_state['rerun'] = True
 
-def make_interactive_image(diagram_path, type: str): #agregar parámetros de cuadriláteros y dimensiones
+@st.cache_data
+def make_interactive_image(diagram, type: str): #agregar parámetros de cuadriláteros y dimensiones
 
     if type == 'mine':
         zones_points = ZONES_POINTS_MINE
@@ -316,7 +312,7 @@ def make_interactive_image(diagram_path, type: str): #agregar parámetros de cua
             >
 
                 <image
-                    href="{diagram_path}"
+                    href="data:image/png;base64,{diagram}"
                     x="0"
                     y="0"
                     width = {diagram_x}
@@ -438,7 +434,7 @@ defaults['selected_segment'] = None
 defaults['go_back'] = False
 defaults['rerun'] = False
 defaults['selected_zone'] = None
-defaults['is_cache_loaded'] = True #########################
+defaults['is_cache_loaded'] = False
 defaults['show_disclaimer'] = True
 init_session_state(defaults)
 
@@ -466,10 +462,10 @@ if st.session_state['selected_segment'] == 'mine':
 
     with diagram_column:
         if st.session_state['selected_zone'] is None:
-            mine_diagram_path = st.session_state['images']['mine_diagram_path']
+            mine_diagram = st.session_state['images']['mine_diagram']
         else:
-            mine_diagram_path = st.session_state['images']['mine_diagram_light_path']
-        html = make_interactive_image(mine_diagram_path, 'mine')
+            mine_diagram = st.session_state['images']['mine_diagram_light']
+        html = make_interactive_image(mine_diagram, 'mine')
         html = html + add_selected_zone_to_html(st.session_state['selected_zone'])
         zone = click_detector(html)
         zone = zone.replace('_', ' ')
@@ -503,13 +499,17 @@ if st.session_state['selected_segment'] == 'paper':
         generate_go_back_button()
 
 if not st.session_state['is_cache_loaded']: #Preload the cache
-    mine_image = st.session_state['images']['mine_diagram_path']
+    mine_image = st.session_state['images']['mine_diagram']
     html = make_interactive_image(mine_image, 'mine')
     st.session_state['is_cache_loaded'] = True
 
 if st.session_state['rerun']: #Reruns on some selections, to avoid input lag
     st.session_state['rerun'] = False
     st.rerun()
+
+
+
+
 
 
 
