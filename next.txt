@@ -1,8 +1,15 @@
 
+-Imágenes y esqueleto pulpa y papel
+-Agregar diámetros
+-Agregar link a catálogo
+-Agregar detalle nitrilo
+-Velocidad
+-Hosting
 
+
+-Velocidad online (cachear imágenes not b64 en el navegador, quizás achicar foto mina?
 -Cambiar color texto?
 -Agregar el PDF descargable
--Agregar pulpa y papel
 
 
 -Pasar coordenadas imágenes de un csv. Usar pandas
