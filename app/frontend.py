@@ -61,8 +61,8 @@ def load_images():
     images = {}
     images['logo'] = Image.open(IMG_PATH / 'Orbinox_logo.png')
     images['logo_b64'] = img_to_base64(Image.open(IMG_PATH / 'Orbinox_logo.png'))
-    images['mine_diagram'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram.webp'))
-    images['mine_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram_light.webp'))
+    images['mine_diagram_path'] = '/app/static/mine_diagram.webp'
+    images['mine_diagram_light_path'] = '/app/static/mine_diagram_light.webp'
     images['mineria'] = Image.open(IMG_PATH / 'mineria.jpg')
     images['mineria_b64'] = img_to_base64(Image.open(IMG_PATH / 'mineria.jpg'))
     images['pulpa_y_papel'] = Image.open(IMG_PATH / 'pulpa_y_papel.jpg')
@@ -288,7 +288,7 @@ def generate_segment_buttons():
             st.session_state['rerun'] = True
 
 @st.cache_data
-def make_interactive_image(diagram, type: str): #agregar parámetros de cuadriláteros y dimensiones
+def make_interactive_image(diagram_path, type: str): #agregar parámetros de cuadriláteros y dimensiones
 
     if type == 'mine':
         zones_points = ZONES_POINTS_MINE
@@ -317,11 +317,11 @@ def make_interactive_image(diagram, type: str): #agregar parámetros de cuadril�
             >
 
                 <image
-                    href="data:image/webp;base64,{diagram}"
+                    href="{diagram_path}"
                     x="0"
                     y="0"
-                    width = {diagram_x}
-                    height = {diagram_y}
+                    width="{diagram_x}"
+                    height="{diagram_y}"
                 />
 
                 {zones_svg}
@@ -439,7 +439,7 @@ defaults['selected_segment'] = None
 defaults['go_back'] = False
 defaults['rerun'] = False
 defaults['selected_zone'] = None
-defaults['is_cache_loaded'] = False
+defaults['is_cache_loaded'] = True
 defaults['show_disclaimer'] = True
 init_session_state(defaults)
 
@@ -467,9 +467,9 @@ if st.session_state['selected_segment'] == 'mine':
 
     with diagram_column:
         if st.session_state['selected_zone'] is None:
-            mine_diagram = st.session_state['images']['mine_diagram']
+            mine_diagram = st.session_state['images']['mine_diagram_path']
         else:
-            mine_diagram = st.session_state['images']['mine_diagram_light']
+            mine_diagram = st.session_state['images']['mine_diagram_light_path']
         html = make_interactive_image(mine_diagram, 'mine')
         html = html + add_selected_zone_to_html(st.session_state['selected_zone'])
         zone = click_detector(html)
