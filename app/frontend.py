@@ -9,9 +9,13 @@ import streamlit as st
 from st_clickable_images import clickable_images
 from st_click_detector import click_detector
 
+
 ROOT_PATH = Path(__file__).resolve().parent.parent
 IMG_PATH = ROOT_PATH / 'img'
 STATIC_PATH = ROOT_PATH / 'app' / 'static'
+#BROWSER_RUNTIME_BASE_PATH = st.get_option("server.baseUrlPath")
+
+
 EMPTY_SPACE = '‎'
 LOGO_WIDTH = 200
 BACK_ARROW_HEIGHT = 40
@@ -57,8 +61,8 @@ def load_images():
     images = {}
     images['logo'] = Image.open(IMG_PATH / 'Orbinox_logo.png')
     images['logo_b64'] = img_to_base64(Image.open(IMG_PATH / 'Orbinox_logo.png'))
-    images['mine_diagram_path'] = '/app/static/mine_diagram.png'
-    images['mine_diagram_light_path'] = '/app/static/mine_diagram_light.png'
+    images['mine_diagram_path'] = '/static/mine_diagram.png'
+    images['mine_diagram_light_path'] = '/static/mine_diagram_light.png'
     images['mineria'] = Image.open(IMG_PATH / 'mineria.jpg')
     images['mineria_b64'] = img_to_base64(Image.open(IMG_PATH / 'mineria.jpg'))
     images['pulpa_y_papel'] = Image.open(IMG_PATH / 'pulpa_y_papel.jpg')
@@ -506,10 +510,6 @@ if not st.session_state['is_cache_loaded']: #Preload the cache
 if st.session_state['rerun']: #Reruns on some selections, to avoid input lag
     st.session_state['rerun'] = False
     st.rerun()
-
-
-
-
 
 
 
