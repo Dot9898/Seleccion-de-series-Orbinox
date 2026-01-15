@@ -52,12 +52,17 @@ def img_to_base64(img):
     img.save(buffer, format="PNG")
     return(base64.b64encode(buffer.getvalue()).decode())
 
+def img_to_base64_webp(img):
+    buffer = BytesIO()
+    img.save(buffer, format="WEBP")
+    return(base64.b64encode(buffer.getvalue()).decode())
+
 def load_images():
     images = {}
     images['logo'] = Image.open(IMG_PATH / 'Orbinox_logo.png')
     images['logo_b64'] = img_to_base64(Image.open(IMG_PATH / 'Orbinox_logo.png'))
-    images['mine_diagram'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram.png'))
-    images['mine_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram_light.png'))
+    images['mine_diagram'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram.webp'))
+    images['mine_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram_light.webp'))
     images['mineria'] = Image.open(IMG_PATH / 'mineria.jpg')
     images['mineria_b64'] = img_to_base64(Image.open(IMG_PATH / 'mineria.jpg'))
     images['pulpa_y_papel'] = Image.open(IMG_PATH / 'pulpa_y_papel.jpg')
@@ -312,7 +317,7 @@ def make_interactive_image(diagram, type: str): #agregar parÃ¡metros de cuadrilÃ
             >
 
                 <image
-                    href="data:image/png;base64,{diagram}"
+                    href="data:image/webp;base64,{diagram}"
                     x="0"
                     y="0"
                     width = {diagram_x}
