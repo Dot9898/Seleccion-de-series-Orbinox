@@ -1,6 +1,7 @@
 
--Imágenes y esqueleto pulpa y papel
--Agregar link a catálogo
+-Expandir rangos imagen pulpa y papel
+-Mejorar imagen espesamiento
+-PULPA Y PAPEL
 -Velocidad (separar html de interactive image html en 3 y cachear?)
 -Hosting
 

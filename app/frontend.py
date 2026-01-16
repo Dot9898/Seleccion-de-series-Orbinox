@@ -5,7 +5,6 @@ from pathlib import Path
 from PIL import Image
 import base64
 from io import BytesIO
-from math import floor
 import streamlit as st
 from st_clickable_images import clickable_images
 from st_click_detector import click_detector
@@ -59,6 +58,12 @@ def img_to_base64(img):
     img.save(buffer, format="WEBP")
     return(base64.b64encode(buffer.getvalue()).decode())
 
+def resize_image_by_expanding_height(image, target_ratio):
+    width = image.size[0]
+    new_height = int(width/target_ratio)
+    image = image.resize((width, new_height), Image.LANCZOS)
+    return(image)
+
 def load_images():
     images = {}
 
@@ -74,6 +79,8 @@ def load_images():
     images['pulpa_y_papel_b64'] = img_to_base64(Image.open(IMG_PATH / 'pulpa_y_papel.webp'))
     images['recycled_paper_plant_diagram'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper_plant_diagram.webp'))
     images['recycled_paper_plant_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper_plant_diagram_light.webp'))
+    for name in ['pulper', 'depuracion', 'destintado', 'espesado', 'blanqueo', 'refinado']:
+        images[name] = (Image.open(IMG_PATH / (name + '.webp')))
 
     images['go_back'] = img_to_base64(Image.open(IMG_PATH / 'back_arrow.webp'))
     images['left_arrow'] = Image.open(IMG_PATH / 'left_arrow.webp')
@@ -413,11 +420,12 @@ def generate_go_back_button():
                                             key = 'back_click')
     if clicked_image_index == 0:
         st.session_state['go_back'] = True
+        st.session_state['selected_zone'] = None
         st.session_state['rerun'] = True
     else:
         st.session_state['go_back'] = False
 
-def generate_empty_state_panel():
+def generate_empty_state_panel(text):
 
     st.markdown(f"<div style='height: {EMPTY_STATE_PANEL_UPPER_SPACING}px;'></div>", unsafe_allow_html = True)
     
@@ -429,9 +437,9 @@ def generate_empty_state_panel():
     st.markdown(f"<div style='height: {EMPTY_STATE_PANEL_LOWER_SPACING}px;'></div>", unsafe_allow_html = True)
 
     st.markdown("<div style='text-align: center; color: gray; font-size: 1.25rem; font-weight: 600;'>"
-                "Elegir sector de la planta, fluido, y presión de trabajo"
+                f"{text}"
                 "</div>",
-                unsafe_allow_html=True,)
+                unsafe_allow_html = True,)
 
 def print_selected_series():
     zone = st.session_state['selected_zone']
@@ -442,8 +450,10 @@ def print_selected_series():
     mangon = mangon_selection(fluid)
     diameters = available_diameters_as_string(valve)
     if None not in [zone, valve, tajadera, mangon]:
+        valve_name = valve[:2]
+        valve_link = VALVE_LINKS[valve_name]
         st.subheader(zone)
-        st.write('Serie recomendada:', valve)
+        st.markdown(f'Serie recomendada: [{valve}]({valve_link})')
         st.write('Material de mangón:', mangon + '*' if mangon == 'Nitrilo' else mangon)
         st.write('Material de tajadera:', tajadera)
         if mangon == 'Nitrilo':
@@ -455,6 +465,16 @@ def print_selected_series():
     else:
         return(False)
 
+def insert_paper_zone_image():
+    zone = st.session_state['selected_zone']
+    if zone is None:
+        return()
+    
+    zone_to_image_name = {'Pulper': 'pulper', 'Depuración': 'depuracion', 'Destintado': 'destintado', 'Espesado': 'espesado', 'Blanqueo': 'blanqueo', 'Refinado': 'refinado'}
+    image_name = zone_to_image_name[zone]
+    image = st.session_state['images'][image_name]
+    image = resize_image_by_expanding_height(image, 1120/644 * 4/3 * 18/20 * 0.99) 
+    st.image(image)
 
 #--------------------------------------------------------------------------------------------------------
 
@@ -488,8 +508,10 @@ if st.session_state['show_disclaimer']:
 
 generate_title_and_logo()
 
+
 if st.session_state['selected_segment'] is None:
     generate_segment_buttons()
+
 
 if st.session_state['selected_segment'] == 'mine':
     diagram_column, data_column = st.columns([1, 1])
@@ -509,24 +531,42 @@ if st.session_state['selected_segment'] == 'mine':
         with dropdowns_column:
             generate_dropdowns()
             if not print_selected_series():
-                generate_empty_state_panel()
+                generate_empty_state_panel('Elegir sector de la planta, fluido, y presión de trabajo')
         
         with go_back_column:
             generate_go_back_button()
 
 
 if st.session_state['selected_segment'] == 'paper':
-    diagram_column, data_column = st.columns([1, 1])
 
-    with diagram_column:
-        if st.session_state['selected_zone'] is None:
+    if st.session_state['selected_zone'] is None:
+        diagram_column, data_column = st.columns([1, 1])
+
+        with diagram_column:
             paper_diagram = st.session_state['images']['recycled_paper_plant_diagram']
-        else:
-            paper_diagram = st.session_state['images']['recycled_paper_plant_diagram_light']
-        make_interactive_image(paper_diagram, 'recycled_paper')
+            make_interactive_image(paper_diagram, 'recycled_paper')
 
-    with data_column:
-        generate_go_back_button()
+        with data_column:
+            st.markdown(f"<div style='height: {DATA_COLUMN_SPACING}px;'></div>", unsafe_allow_html = True)
+            stuff_column, go_back_column = st.columns([18, 2])
+            with go_back_column:
+                generate_go_back_button()
+            generate_empty_state_panel('Elegir sector de la planta')
+    
+    else:
+        diagram_column, data_column = st.columns([3, 4])
+
+        with diagram_column:
+            paper_diagram = st.session_state['images']['recycled_paper_plant_diagram_light']
+            make_interactive_image(paper_diagram, 'recycled_paper')
+
+        with data_column:
+            st.markdown(f"<div style='height: {DATA_COLUMN_SPACING}px;'></div>", unsafe_allow_html = True)
+            stuff_column, go_back_column = st.columns([18, 2])
+            with stuff_column:
+                insert_paper_zone_image()
+            with go_back_column:
+                generate_go_back_button()
 
 
 if st.session_state['rerun']: #Reruns on some selections, to avoid input lag
