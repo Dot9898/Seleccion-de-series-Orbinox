@@ -5,6 +5,7 @@ from pathlib import Path
 from PIL import Image
 import base64
 from io import BytesIO
+from math import floor
 import streamlit as st
 from st_clickable_images import clickable_images
 from st_click_detector import click_detector
@@ -36,6 +37,12 @@ ZONES_WRAPPER_POINTS_MINE = {'Molienda': [(2995, 2322), (3821, 1964), (4285, 240
                              'Espesamiento': [(3740, 1716), (2885, 1737), (2857, 830), (3829, 830)], 
                              'Filtrado': [(2853, 1737), (2824, 826), (1648, 769), (1713, 1822)], 
                              'Relaves': [(4073, 779), (4073, 5), (422, 5), (459, 809)]}
+ZONE_POINTS_RECYCLED_PAPER = {'Pulper': [(289, 527), (287, 480), (286, 402), (293, 387), (320, 368), (344, 364), (366, 364), (391, 374), (405, 387), (408, 404), (408, 420), (413, 419), (425, 405), (446, 405), (459, 414), (460, 452), (448, 463), (437, 465), (437, 471), (477, 485), (473, 494), (421, 476), (406, 474), (408, 483), (410, 529), (384, 547), (365, 535), (363, 524), (329, 523), (329, 534), (309, 544)], 
+                              'Depuración': [(517, 538), (517, 511), (496, 509), (496, 493), (514, 493), (516, 403), (509, 402), (509, 372), (519, 371), (521, 352), (718, 357), (775, 362), (940, 363), (947, 392), (942, 456), (934, 498), (944, 500), (944, 511), (740, 509), (738, 516), (717, 515), (715, 543)], 
+                              'Destintado': [(960, 355), (1010, 362), (1030, 346), (1031, 330), (1055, 338), (1051, 377), (1059, 378), (1064, 332), (1032, 322), (1025, 304), (1029, 299), (1052, 296), (1067, 282), (1068, 267), (1091, 274), (1088, 315), (1094, 316), (1101, 268), (1069, 258), (1061, 245), (1060, 236), (1052, 238), (1039, 233), (1022, 233), (1015, 224), (1011, 233), (996, 240), (987, 249), (987, 273), (994, 286), (994, 293), (985, 292), (977, 283), (974, 293), (959, 299), (951, 308), (948, 336)], 
+                              'Espesado': [(907, 321), (933, 272), (921, 253), (937, 225), (920, 221), (923, 196), (904, 189), (900, 200), (793, 168), (783, 183), (759, 176), (755, 182), (747, 179), (740, 190), (740, 197), (745, 199), (729, 226), (751, 233), (726, 271)], 
+                              'Blanqueo': [(628, 255), (628, 245), (620, 239), (621, 211), (628, 196), (644, 191), (658, 198), (665, 197), (669, 175), (660, 173), (658, 155), (671, 143), (671, 123), (680, 111), (693, 109), (702, 118), (702, 129), (693, 145), (691, 190), (707, 184), (722, 190), (723, 210), (715, 216), (715, 225), (696, 227), (689, 240), (682, 241), (680, 258)], 
+                              'Refinado': [(591, 210), (598, 210), (599, 202), (593, 201), (599, 186), (585, 178), (563, 176), (561, 183), (566, 185), (557, 192), (557, 203), (566, 215), (581, 219)]}
 FLUID_OPTIONS_MINE = {'Molienda': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
                       'Hidrociclones': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
                       'Flotación': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
@@ -54,14 +61,20 @@ def img_to_base64(img):
 
 def load_images():
     images = {}
+
     images['logo'] = Image.open(IMG_PATH / 'Orbinox_logo.webp')
     images['logo_b64'] = img_to_base64(Image.open(IMG_PATH / 'Orbinox_logo.webp'))
+    images['go_back'] = img_to_base64(Image.open(IMG_PATH / 'back_arrow.webp'))
+    images['left_arrow'] = Image.open(IMG_PATH / 'left_arrow.webp')
+
+    images['mineria_b64'] = img_to_base64(Image.open(IMG_PATH / 'mineria.webp'))
     images['mine_diagram'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram.webp'))
     images['mine_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram_light.webp'))
-    images['mineria'] = Image.open(IMG_PATH / 'mineria.webp')
-    images['mineria_b64'] = img_to_base64(Image.open(IMG_PATH / 'mineria.webp'))
-    images['pulpa_y_papel'] = Image.open(IMG_PATH / 'pulpa_y_papel.webp')
+
     images['pulpa_y_papel_b64'] = img_to_base64(Image.open(IMG_PATH / 'pulpa_y_papel.webp'))
+    images['recycled_paper_plant_diagram'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper_plant_diagram.webp'))
+    images['recycled_paper_plant_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper_plant_diagram_light.webp'))
+
     images['go_back'] = img_to_base64(Image.open(IMG_PATH / 'back_arrow.webp'))
     images['left_arrow'] = Image.open(IMG_PATH / 'left_arrow.webp')
     return(images)
@@ -150,7 +163,6 @@ def mangon_selection(fluid):
 @st.cache_data
 def get_zones_svg_string(zones_points, zones_wrapper_points):
     fragments = []
-
     for zone, points in zones_points.items():
         points_str = (' ').join(f'{x},{y}' for x, y in points)
         wrapper_points = zones_wrapper_points[zone]
@@ -178,19 +190,97 @@ def get_zones_svg_string(zones_points, zones_wrapper_points):
     return(('\n').join(fragments))
 
 @st.cache_data
-def add_selected_zone_to_html(selected_zone):
+def interactive_image_html(diagram, type): #agregar parámetros de cuadriláteros y dimensiones
+
+    if type == 'mine':
+        zones_points = ZONES_POINTS_MINE
+        zones_wrapper_points = ZONES_WRAPPER_POINTS_MINE
+        diagram_x = 5388
+        diagram_y = 3404
+        stroke_width = 5
+    
+    if type == 'recycled_paper':
+        zones_points = ZONE_POINTS_RECYCLED_PAPER
+        zones_wrapper_points = ZONE_POINTS_RECYCLED_PAPER
+        diagram_x = 1120
+        diagram_y = 644
+        stroke_width = 1
+
+    zones_svg = get_zones_svg_string(zones_points, zones_wrapper_points)
+
+    html = f"""
+        <div style="
+            width: 100%;
+            aspect-ratio: {diagram_x} / {diagram_y};
+            position: relative;
+        ">
+            <svg
+                viewBox="0 0 {diagram_x} {diagram_y}"
+                preserveAspectRatio="xMidYMid meet"
+                style="
+                    position: absolute;
+                    inset: 0;
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                "
+            >
+
+                <image
+                    href="data:image/webp;base64,{diagram}"
+                    x="0"
+                    y="0"
+                    width = {diagram_x}
+                    height = {diagram_y}
+                />
+
+                {zones_svg}
+
+                <style>
+                    .zone-interaction {{
+                        fill: transparent;
+                        stroke: transparent;
+                        pointer-events: all;
+                        cursor: pointer;
+                    }}
+
+                    .zone-visual {{
+                        fill: transparent;
+                        stroke: transparent;
+                        pointer-events: none;
+                    }}
+
+                    .zone-group:hover .zone-visual {{
+                        fill: rgba(0,120,255,0.3);
+                        stroke: rgba(0,120,255,0.45);
+                        stroke-width: {stroke_width};
+                    }}
+                </style>
+
+            </svg>
+        </div>
+        """
+
+    return(html)
+
+@st.cache_data
+def add_selected_zone_to_html(selected_zone, type):
     if selected_zone is None:
         return('')
 
     zone_id = selected_zone.replace(" ", "_")
 
+    if type == 'mine':   #agregar todo esto a un global, y lo de interactive image html tb
+        stroke_width = 5
+    if type == 'recycled_paper':
+        stroke_width = 1
     # rgba(255,80,0,0.95) orange
     extra_html = f"""
                 <style>
                 #{zone_id}.zone-group .zone-visual {{
                     fill: rgba(0,120,255,0.45);
                     stroke: rgba(0,120,255,0.6);
-                    stroke-width: 4;
+                    stroke-width: {stroke_width};
                 }}
                 </style>
                 """
@@ -282,71 +372,16 @@ def generate_segment_buttons():
             set_selected_segment('paper')
             st.session_state['rerun'] = True
 
-@st.cache_data
-def make_interactive_image(diagram, type: str): #agregar parámetros de cuadriláteros y dimensiones
-
-    if type == 'mine':
-        zones_points = ZONES_POINTS_MINE
-        zones_wrapper_points = ZONES_WRAPPER_POINTS_MINE
-        diagram_x = 5388
-        diagram_y = 3404
-
-    zones_svg = get_zones_svg_string(zones_points, zones_wrapper_points)
-
-    html = f"""
-        <div style="
-            width: 100%;
-            aspect-ratio: {diagram_x} / {diagram_y};
-            position: relative;
-        ">
-            <svg
-                viewBox="0 0 {diagram_x} {diagram_y}"
-                preserveAspectRatio="xMidYMid meet"
-                style="
-                    position: absolute;
-                    inset: 0;
-                    width: 100%;
-                    height: 100%;
-                    display: block;
-                "
-            >
-
-                <image
-                    href="data:image/webp;base64,{diagram}"
-                    x="0"
-                    y="0"
-                    width = {diagram_x}
-                    height = {diagram_y}
-                />
-
-                {zones_svg}
-
-                <style>
-                    .zone-interaction {{
-                        fill: transparent;
-                        stroke: transparent;
-                        pointer-events: all;
-                        cursor: pointer;
-                    }}
-
-                    .zone-visual {{
-                        fill: transparent;
-                        stroke: transparent;
-                        pointer-events: none;
-                    }}
-
-                    .zone-group:hover .zone-visual {{
-                        fill: rgba(0,120,255,0.3);
-                        stroke: rgba(0,120,255,0.45);
-                        stroke-width: 4;
-                    }}
-                </style>
-
-            </svg>
-        </div>
-        """
-
-    return(html)
+def make_interactive_image(diagram, type: str):
+    html = interactive_image_html(diagram, type)
+    html = html + add_selected_zone_to_html(st.session_state['selected_zone'], type)
+    zone = click_detector(html)
+    zone = zone.replace('_', ' ')
+    if zone == '':
+        zone = None
+    if zone is not None:
+        st.session_state['selected_zone'] = zone
+        st.session_state['rerun'] = True
 
 def generate_dropdowns():
     fluid_column, pressure_column = st.columns([1, 1])
@@ -434,7 +469,6 @@ defaults['selected_segment'] = None
 defaults['go_back'] = False
 defaults['rerun'] = False
 defaults['selected_zone'] = None
-defaults['is_cache_loaded'] = False
 defaults['show_disclaimer'] = True
 init_session_state(defaults)
 
@@ -465,15 +499,7 @@ if st.session_state['selected_segment'] == 'mine':
             mine_diagram = st.session_state['images']['mine_diagram']
         else:
             mine_diagram = st.session_state['images']['mine_diagram_light']
-        html = make_interactive_image(mine_diagram, 'mine')
-        html = html + add_selected_zone_to_html(st.session_state['selected_zone'])
-        zone = click_detector(html)
-        zone = zone.replace('_', ' ')
-        if zone == '':
-            zone = None
-        if zone is not None:
-            st.session_state['selected_zone'] = zone
-            st.session_state['rerun'] = True
+        make_interactive_image(mine_diagram, 'mine')
 
     with data_column:
         st.markdown(f"<div style='height: {DATA_COLUMN_SPACING}px;'></div>", unsafe_allow_html = True)
@@ -493,15 +519,15 @@ if st.session_state['selected_segment'] == 'paper':
     diagram_column, data_column = st.columns([1, 1])
 
     with diagram_column:
-        pass
+        if st.session_state['selected_zone'] is None:
+            paper_diagram = st.session_state['images']['recycled_paper_plant_diagram']
+        else:
+            paper_diagram = st.session_state['images']['recycled_paper_plant_diagram_light']
+        make_interactive_image(paper_diagram, 'recycled_paper')
 
     with data_column:
         generate_go_back_button()
 
-if not st.session_state['is_cache_loaded']: #Preload the cache
-    mine_image = st.session_state['images']['mine_diagram']
-    html = make_interactive_image(mine_image, 'mine')
-    st.session_state['is_cache_loaded'] = True
 
 if st.session_state['rerun']: #Reruns on some selections, to avoid input lag
     st.session_state['rerun'] = False

@@ -1,9 +1,7 @@
 
 -Imágenes y esqueleto pulpa y papel
--Agregar diámetros
 -Agregar link a catálogo
--Agregar detalle nitrilo
--Velocidad
+-Velocidad (separar html de interactive image html en 3 y cachear?)
 -Hosting
 
 
