@@ -42,6 +42,12 @@ ZONE_POINTS_RECYCLED_PAPER = {'Pulper': [(289, 527), (287, 480), (286, 402), (29
                               'Espesado': [(907, 321), (933, 272), (921, 253), (937, 225), (920, 221), (923, 196), (904, 189), (900, 200), (793, 168), (783, 183), (759, 176), (755, 182), (747, 179), (740, 190), (740, 197), (745, 199), (729, 226), (751, 233), (726, 271)], 
                               'Blanqueo': [(628, 255), (628, 245), (620, 239), (621, 211), (628, 196), (644, 191), (658, 198), (665, 197), (669, 175), (660, 173), (658, 155), (671, 143), (671, 123), (680, 111), (693, 109), (702, 118), (702, 129), (693, 145), (691, 190), (707, 184), (722, 190), (723, 210), (715, 216), (715, 225), (696, 227), (689, 240), (682, 241), (680, 258)], 
                               'Refinado': [(591, 210), (598, 210), (599, 202), (593, 201), (599, 186), (585, 178), (563, 176), (561, 183), (566, 185), (557, 192), (557, 203), (566, 215), (581, 219)]}
+ZONE_WRAPPER_POINTS_RECYCLED_PAPER = {'Pulper': [(171, 625), (192, 335), (492, 336), (495, 625)], 
+                                      'Depuración': [(499, 331), (500, 619), (1005, 616), (1005, 422), (964, 389), (953, 368), (932, 349)], 
+                                      'Destintado': [(954, 367), (936, 349), (930, 331), (986, 195), (1038, 188), (1118, 243), (1118, 425), (1034, 417)], 
+                                      'Espesado': [(983, 163), (918, 351), (742, 340), (689, 309), (767, 103)], 
+                                      'Blanqueo': [(682, 311), (774, 71), (661, 58), (570, 308)], 
+                                      'Refinado': [(640, 93), (568, 289), (482, 280), (489, 133), (558, 84)]}
 FLUID_OPTIONS_MINE = {'Molienda': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
                       'Hidrociclones': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
                       'Flotación': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
@@ -208,7 +214,7 @@ def interactive_image_html(diagram, type): #agregar parámetros de cuadrilátero
     
     if type == 'recycled_paper':
         zones_points = ZONE_POINTS_RECYCLED_PAPER
-        zones_wrapper_points = ZONE_POINTS_RECYCLED_PAPER
+        zones_wrapper_points = ZONE_WRAPPER_POINTS_RECYCLED_PAPER
         diagram_x = 1120
         diagram_y = 644
         stroke_width = 1
