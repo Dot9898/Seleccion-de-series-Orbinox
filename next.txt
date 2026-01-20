@@ -1,18 +1,15 @@
 
--Expandir rangos imagen pulpa y papel
 -Mejorar imagen espesamiento
 -PULPA Y PAPEL
 -Velocidad (separar html de interactive image html en 3 y cachear?)
 -Hosting
 
 
--Velocidad online (cachear imágenes not b64 en el navegador, quizás achicar foto mina?
 -Cambiar color texto?
 -Agregar el PDF descargable
 
 
 -Pasar coordenadas imágenes de un csv. Usar pandas
--La versión en la nube corre un poco lento en la primera carga... Es solucionable
 -Añadir segundas opciones?
 -Hacerlo compatible en pantallas pequeñas y teléfonos, eso queda para el final
 -Cambiar lenguaje foto? O eliminar texto
