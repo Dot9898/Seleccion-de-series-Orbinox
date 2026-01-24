@@ -1,5 +1,4 @@
 
--Mejorar imagen espesamiento
 -PULPA Y PAPEL
 -Velocidad (separar html de interactive image html en 3 y cachear?)
 -Hosting
