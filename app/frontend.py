@@ -78,36 +78,36 @@ def init_session_state(defaults):
         if key not in st.session_state:
             st.session_state[key] = defaults[key]
 
-def select_diagram_and_image_name(selected_segment, selected_zone):
+def select_diagram_key_and_image_name(selected_segment, selected_zone):
 
-    diagram = None
+    diagram_key = None
     image_name = None
 
     if selected_segment == 'mine':
         if selected_zone is None:
-            diagram = st.session_state['images']['mine_diagram']
+            diagram_key = 'mine_diagram'
         else:
-            diagram = st.session_state['images']['mine_diagram_light']
+            diagram_key = 'mine_diagram_light'
         image_name = 'mine'
 
     elif selected_segment == 'paper':
 
         if selected_zone in [None, 'Papel-reciclado']:
             image_name = 'recycled_paper'
-            diagram = st.session_state['images']['recycled_paper_plant_diagram']
+            diagram_key = 'recycled_paper_plant_diagram'
 
         elif selected_zone in IMAGES_INFO['recycled_paper']['zones']:
             image_name = ZONE_TO_IMAGE_NAME[selected_zone]
-            diagram = st.session_state['images'][f'{image_name}_dark']
+            diagram_key = f'{image_name}_dark'
         
         else:
             for paper_zone in IMAGES_INFO['recycled_paper']['zones']:
                 paper_zone_name = ZONE_TO_IMAGE_NAME[paper_zone]
                 if selected_zone in IMAGES_INFO[paper_zone_name]['zones']:   #En este listado está incluido papel reciclado, por lo tanto es importante el orden, y que este else vaya al final
                     image_name = paper_zone_name
-                    diagram = st.session_state['images'][f'{image_name}_light']
+                    diagram_key = f'{image_name}_light'
     
-    return((diagram, image_name))
+    return((diagram_key, image_name))
 
 def valve_selection(zone, pressure, fluid):
 
@@ -213,7 +213,10 @@ def get_zones_svg_string(zones_points, zones_wrapper_points):
 
     return(('\n').join(fragments))
 
-def interactive_image_html(diagram, diagram_name): #agregar parámetros de cuadriláteros y dimensiones
+@st.cache_data
+def interactive_image_html(diagram_key, diagram_name): #agregar parámetros de cuadriláteros y dimensiones
+
+    diagram = st.session_state['images'][diagram_key]
 
     image_info = IMAGES_INFO[diagram_name]
     zones_points = image_info['zone_points']
@@ -281,6 +284,7 @@ def interactive_image_html(diagram, diagram_name): #agregar parámetros de cuadr
 
     return(html)
 
+@st.cache_data
 def add_selected_zone_to_html(selected_zone, diagram_name):
     if selected_zone is None:
         return('')
@@ -394,12 +398,12 @@ def generate_segment_buttons():
             set_selected_segment('paper')
             st.session_state['rerun'] = True
 
-def make_interactive_image(diagram, diagram_name: str):
+def make_interactive_image(diagram_key, diagram_name: str):
 
-    if diagram is None or image_name is None:
+    if diagram_key is None or image_name is None:
         return(None)
 
-    html = interactive_image_html(diagram, diagram_name)
+    html = interactive_image_html(diagram_key, diagram_name)
     html = html + add_selected_zone_to_html(st.session_state['selected_zone'], diagram_name)
     zone = click_detector(html)
     zone = zone.replace('_', ' ')
@@ -548,7 +552,7 @@ if selected_segment == 'mine':
     diagram_column, data_column = st.columns([1, 1])
     
     with diagram_column:
-        diagram, image_name = select_diagram_and_image_name(selected_segment, selected_zone)
+        diagram, image_name = select_diagram_key_and_image_name(selected_segment, selected_zone)
         make_interactive_image(diagram, image_name)
     
     with data_column:
@@ -569,7 +573,7 @@ if selected_segment == 'paper':
     diagram_column, data_column = st.columns([1, 1])
 
     with diagram_column:
-        diagram, image_name = select_diagram_and_image_name(selected_segment, selected_zone)
+        diagram, image_name = select_diagram_key_and_image_name(selected_segment, selected_zone)
         make_interactive_image(diagram, image_name)
 
     with data_column:
