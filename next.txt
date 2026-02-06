@@ -1,6 +1,7 @@
 
+preguntar lourdes blanqueo 10-15 pero valvulas unidireccionales (max 5)
 -PULPA Y PAPEL
--Velocidad (separar html de interactive image html en 3 y cachear?)
+-Velocidad (load img from github raw link, so that its cached in browser)
 -Hosting
 
 
@@ -8,7 +9,6 @@
 -Agregar el PDF descargable
 
 
--Pasar coordenadas imágenes de un csv. Usar pandas
 -Añadir segundas opciones?
 -Hacerlo compatible en pantallas pequeñas y teléfonos, eso queda para el final
 -Cambiar lenguaje foto? O eliminar texto
