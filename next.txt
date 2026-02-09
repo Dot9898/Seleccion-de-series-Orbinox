@@ -1,6 +1,5 @@
 
-preguntar lourdes blanqueo 10-15 pero valvulas unidireccionales (max 5)
--PULPA Y PAPEL
+-Usar set selected zone para todos los cambios de st selected zone y segment
 -Velocidad (load img from github raw link, so that its cached in browser)
 -Hosting
 
@@ -8,7 +7,7 @@ preguntar lourdes blanqueo 10-15 pero valvulas unidireccionales (max 5)
 -Cambiar color texto?
 -Agregar el PDF descargable
 
-
+-preguntar lourdes blanqueo 10-15 pero valvulas unidireccionales (max 5)
 -Añadir segundas opciones?
 -Hacerlo compatible en pantallas pequeñas y teléfonos, eso queda para el final
 -Cambiar lenguaje foto? O eliminar texto

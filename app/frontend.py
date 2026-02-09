@@ -24,8 +24,6 @@ EMPTY_STATE_PANEL_UPPER_SPACING = EMPTY_STATE_PANEL_LOWER_SPACING + 15
 
 SOLIDS_CONCENTRATION_TO_INT = {'Menos de 5%': 5, f'5% - 12%': 12, 'Más de 12%': 999, 'No considerar': 0, None: None}
 
-ZONE_TO_IMAGE_NAME = {'Pulper': 'pulper', 'Depuración': 'depuracion', 'Destintado': 'destintado', 'Espesado': 'espesado', 'Blanqueo': 'blanqueo', 'Refinado': 'refinado'}
-
 FLUID_OPTIONS_MINE = {'Molienda': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
                       'Hidrociclones': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
                       'Flotación': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
@@ -38,16 +36,6 @@ FLUID_OPTIONS_MINE = {'Molienda': ['Pulpa con agua', 'Pulpa con agua de mar', 'P
 
 
 #Utilities
-
-def separate_valve_name_and_flags(valve_name_with_flags): #Inputs the name of a valve 'TK_actuator_duplex', outputs a the raw name 'TK' and a list of its flags ['actuator', 'duplex']
-    if valve_name_with_flags is None:
-        return((None, []))
-    if valve_name_with_flags == 'No_valve_available':
-        return(('No_valve_available', []))
-    split = valve_name_with_flags.split('_')
-    name = split[0]
-    flags = split[1:]
-    return((name, flags))
 
 def img_to_base64(img):
     buffer = BytesIO()
@@ -68,19 +56,24 @@ def load_images():
     images['go_back'] = img_to_base64(Image.open(IMG_PATH / 'back_arrow.webp'))
     images['left_arrow'] = Image.open(IMG_PATH / 'left_arrow.webp')
 
-    images['mineria_b64'] = img_to_base64(Image.open(IMG_PATH / 'mineria.webp'))
-    images['mine_diagram'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram.webp'))
-    images['mine_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'mine_diagram_light.webp'))
+    images['mineria_b64'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'mineria.webp'))
+    images['pulpa_y_papel_b64'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'pulpa_y_papel.webp'))
 
-    images['pulpa_y_papel_b64'] = img_to_base64(Image.open(IMG_PATH / 'pulpa_y_papel.webp'))
-    images['recycled_paper_plant_diagram'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper_plant_diagram.webp'))
-    images['recycled_paper_plant_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper_plant_diagram_light.webp'))
+    images['mine_diagram'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'mine_diagram.webp'))
+    images['mine_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'mine_diagram_light.webp'))
+
+    images['recycled_paper_diagram'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'recycled_paper_diagram.webp'))
+    #images['recycled_paper_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'recycled_paper_diagram_light.webp'))
     for name in ['pulper', 'depuracion', 'destintado', 'espesado', 'blanqueo', 'refinado']:
         images[name + '_dark'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper' / (name + '_dark.jpg')))
         images[name + '_light'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper' / (name + '_light.jpg')))
+    
+    images['virgin_paper_diagram'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'virgin_paper_diagram.webp'))
+    #images['virgin_paper_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'virgin_paper_diagram_light.webp'))
+    for name in ['coccion', 'cribado', 'deslignificacion', 'recuperacion']:
+        images[name + '_dark'] = img_to_base64(Image.open(IMG_PATH / 'virgin_paper' / (name + '_dark.webp')))
+        images[name + '_light'] = img_to_base64(Image.open(IMG_PATH / 'virgin_paper' / (name + '_light.webp')))
 
-    images['go_back'] = img_to_base64(Image.open(IMG_PATH / 'back_arrow.webp'))
-    images['left_arrow'] = Image.open(IMG_PATH / 'left_arrow.webp')
     return(images)
 
 def init_session_state(defaults):
@@ -100,25 +93,63 @@ def select_diagram_key(selected_segment, selected_zone):
 
     elif selected_segment == 'paper':
 
-        if selected_zone in [None, 'Papel-reciclado']:
-            diagram_key = 'recycled_paper_plant_diagram'
+        if selected_zone in [None, 'Papel-virgen']:
+            diagram_key = 'virgin_paper_diagram'
 
-        elif selected_zone in constants_images.IMAGES_INFO['recycled_paper']['zones']:
-            diagram_name = ZONE_TO_IMAGE_NAME[selected_zone]
+        elif selected_zone == 'Papel-reciclado':
+            diagram_key = 'recycled_paper_diagram'
+        
+        elif selected_zone in (constants_images.IMAGES_INFO['recycled_paper']['zones'] + constants_images.IMAGES_INFO['virgin_paper']['zones']):
+            diagram_name = constants_images.ZONE_TO_IMAGE_NAME[selected_zone]
             diagram_key = f'{diagram_name}_dark'
         
         else:
-            paper_zone = selected_zone.split('-')[0]
-            paper_zone_name = ZONE_TO_IMAGE_NAME[paper_zone]
-            diagram_name = paper_zone_name
+            super_zone = '-'.join(selected_zone.split('-')[:-1])
+            super_zone_name = constants_images.ZONE_TO_IMAGE_NAME[super_zone]
+            diagram_name = super_zone_name
             diagram_key = f'{diagram_name}_light'
     
     return(diagram_key)
 
-def get_available_diameters(zone, pressure):
+def separate_valve_name_and_flags(valve_name_with_flags): #Inputs the name of a valve 'TK_actuator_duplex', outputs a the raw name 'TK' and a list of its flags ['actuator', 'duplex']
+    if valve_name_with_flags is None:
+        return((None, []))
+    if valve_name_with_flags == 'No_valve_available':
+        return(('No_valve_available', []))
+    split = valve_name_with_flags.split('_')
+    name = split[0]
+    flags = split[1:]
+    return((name, flags))
+
+def get_flags_messages(flags):
+    messages = {'duplex': '*Presión máxima seleccionada solo disponible con tajadera en dúplex', 
+                'actuator': '*Diámetro solo disponible con uso de actuador', 
+                'neumatic': '*Diámetro solo disponible con uso de actuador neumático', 
+                'electric': '*Diámetro solo disponible con uso de actuador eléctrico'}
+    to_print = []
+    for flag in messages: #Keeps order and doesn't print flags not explicited here
+        if flag in flags:
+            to_print.append(messages[flag])
+    
+    return('  \n'.join(to_print))
+
+def get_available_pressures(selected_zone):
+    available_valves_string = constants_valves.ZONE_TO_AVAILABLE_VALVES_STRING[selected_zone]
+    available_pressures = []
+    valves = constants_valves.AVAILABLE_VALVES_STRING_TO_LIST[available_valves_string]
+    for valve in valves:
+        for valve_name_with_flags in constants_valves.VALVE_NAME_TO_NAMES_WITH_FLAGS[valve]:
+            for max_pressure in constants_valves.VALVE_DIAMETERS_AND_PRESSURES[valve_name_with_flags].values():
+                available_pressures.append(max_pressure)
+    
+    available_pressures = sorted(list(set(available_pressures)))
+    return(available_pressures)
+
+def get_available_diameters(selected_zone, pressure):
     if pressure is None:
         return([])
-    available_valves_string = constants_valves.ZONE_TO_AVAILABLE_VALVES_STRING[zone]
+    
+    available_valves_string = constants_valves.ZONE_TO_AVAILABLE_VALVES_STRING[selected_zone]
     available_diameters = []
     valves = constants_valves.AVAILABLE_VALVES_STRING_TO_LIST[available_valves_string]
     for valve in valves:
@@ -126,6 +157,7 @@ def get_available_diameters(zone, pressure):
             for diameter, max_pressure in constants_valves.VALVE_DIAMETERS_AND_PRESSURES[valve_name_with_flags].items():
                 if pressure <= max_pressure:
                     available_diameters.append(diameter)
+
     available_diameters = sorted(list(set(available_diameters)))
     return(available_diameters)
 
@@ -149,7 +181,7 @@ def valve_selection_paper(zone, pressure, diameter, solids_concentration = 0, of
     if available_valves_string is None or pressure is None or diameter is None:
         return(None)
     
-    if available_valves_string in ['TL/TK/HK', 'EK/ET/TK', 'DT/TL/TK/ET', 'JT/CR/DT']:
+    if available_valves_string in ['TL/TK/HK', 'EK/TK', 'EK/ET/TK', 'DT/TL/TK/ET', 'JT/CR/DT']:
         solids_concentration = SOLIDS_CONCENTRATION_TO_INT[st.session_state['solids_concentration']]
         if solids_concentration is None:
             return(None)
@@ -160,10 +192,15 @@ def valve_selection_paper(zone, pressure, diameter, solids_concentration = 0, of
             off_seating_pressure = 0
         if off_seating_pressure is None:
             return(None)
-    
 
     if available_valves_string == 'TL/TK':
         for valve in ['TL', 'TK']:
+            valve_name_with_flags = get_acceptable_valve(valve, pressure, diameter)
+            if valve_name_with_flags is not None:
+                return(valve_name_with_flags)
+    
+    if available_valves_string == 'TH/TL':
+        for valve in ['TL', 'TH']:
             valve_name_with_flags = get_acceptable_valve(valve, pressure, diameter)
             if valve_name_with_flags is not None:
                 return(valve_name_with_flags)
@@ -175,10 +212,14 @@ def valve_selection_paper(zone, pressure, diameter, solids_concentration = 0, of
             if is_valve_acceptable('HK_off', off_seating_pressure, diameter) and is_valve_acceptable('HK', pressure, diameter):
                 return('HK')
             return('No_valve_available')
-        for valve in ['TL', 'TK']:
+        for valve in ['TL', 'TK', 'HK']:
             valve_name_with_flags = get_acceptable_valve(valve, pressure, diameter)
             if valve_name_with_flags is not None:
                 return(valve_name_with_flags)
+
+    if available_valves_string == 'EX':
+        if is_valve_acceptable('EX', pressure, diameter):
+            return('EX')
             
     if available_valves_string == 'EX/EK':
         for valve in ['EX', 'EK']:
@@ -197,6 +238,17 @@ def valve_selection_paper(zone, pressure, diameter, solids_concentration = 0, of
             valve_name_with_flags = get_acceptable_valve(valve, pressure, diameter)
             if valve_name_with_flags is not None:
                 return(valve_name_with_flags)
+    
+    if available_valves_string == 'EK/TK':
+        if solids_concentration > 5:
+            valve_name_with_flags = get_acceptable_valve('TK', pressure, diameter)
+            if valve_name_with_flags is not None:
+                return(valve_name_with_flags)
+        else:
+            for valve in ['EK', 'TK']:
+                valve_name_with_flags = get_acceptable_valve(valve, pressure, diameter)
+                if valve_name_with_flags is not None:
+                    return(valve_name_with_flags)
 
     if available_valves_string == 'EK/ET/TK':
         if solids_concentration > 5:
@@ -453,6 +505,11 @@ def disable_disclaimer():
 
 def set_selected_segment(segment):
     st.session_state['selected_segment'] = segment
+    st.session_state['rerun'] = True
+
+def set_selected_zone(zone):
+    st.session_state['selected_zone'] = zone
+    st.session_state['rerun'] = True
 
 def go_back():
     st.session_state['selected_segment'] = None
@@ -517,7 +574,6 @@ def generate_segment_buttons():
                         
         if mine_image_index == 0:
             set_selected_segment('mine')
-            st.session_state['rerun'] = True
 
     with paper_column:
         st.button('Pulpa y papel', 
@@ -532,7 +588,23 @@ def generate_segment_buttons():
                                             img_style = {"cursor": "pointer", "width": "100%", "border-radius": "8px"})
         if paper_image_index == 0:
             set_selected_segment('paper')
-            st.session_state['rerun'] = True
+
+def generate_paper_buttons():
+    virgin_column, recycled_column = st.columns([1, 1])
+    
+    with virgin_column:
+        st.button('Papel virgen', 
+                key = 'virgin_button', 
+                width = 'stretch', 
+                on_click = set_selected_zone, 
+                args = ['Papel-virgen'])
+
+    with recycled_column:
+        st.button('Papel reciclado', 
+                key = 'recycled_button', 
+                width = 'stretch', 
+                on_click = set_selected_zone, 
+                args = ['Papel-reciclado'])
 
 def make_interactive_image(diagram_key):
 
@@ -578,7 +650,7 @@ def generate_dropdowns_paper():
 
     with pressure_column:
         st.selectbox('Presión máxima en la válvula (bar)', 
-                     [2, 4, 5, 6, 7, 8, 10, 16], 
+                     get_available_pressures(selected_zone), 
                      index = None, 
                      label_visibility = 'collapsed', 
                      accept_new_options = False, 
@@ -595,7 +667,7 @@ def generate_dropdowns_paper():
                      key = 'off_seat_pressure')
             double_spacing = False
 
-        if available_valves_string in ['EK/ET/TK', 'DT/TL/TK/ET', 'JT/CR/DT']:
+        if available_valves_string in ['EK/TK', 'EK/ET/TK', 'DT/TL/TK/ET', 'JT/CR/DT']:
             st.selectbox('Concentración de sólidos', 
                          ['Menos de 5%', f'5% - 12%', 'Más de 12%', 'No considerar'], 
                          index = None, 
@@ -646,6 +718,8 @@ def add_vertical_spacing(pixels):
 
 def generate_empty_state_panel(text, double_spacing = True):
 
+    add_vertical_spacing(DATA_COLUMN_SPACING)
+    add_vertical_spacing(EMPTY_STATE_PANEL_UPPER_SPACING)
     if double_spacing:
         add_vertical_spacing(EMPTY_STATE_PANEL_UPPER_SPACING)
     
@@ -687,27 +761,15 @@ def print_selected_series_mine():
         st.caption('Diámetros disponibles: ' + diameters + '  \n' + '*DN superiores bajo consulta')
         return(True)
 
-def get_flags_messages(flags):
-    messages = {'duplex': '*Presión máxima seleccionada solo disponible con tajadera en dúplex', 
-                'actuator': '*Diámetro solo disponible con uso de actuador', 
-                'neumatic': '*Diámetro solo disponible con uso de actuador neumático', 
-                'electric': '*Diámetro solo disponible con uso de actuador eléctrico'}
-    to_print = []
-    for flag in messages: #Keeps order and doesn't print flags not explicited here
-        if flag in flags:
-            to_print.append(messages[flag])
-    
-    return('  \n'.join(to_print))
-
 def print_selected_series_paper():
     
     zone = st.session_state['selected_zone']
     pressure = st.session_state['pressure']
-    if pressure == None or zone in constants_images.IMAGES_INFO['recycled_paper']['zones'] + ['Papel-reciclado', None]:
+    if pressure == None or zone in ['Papel-reciclado', 'Papel-virgen', None] + constants_images.IMAGES_INFO['recycled_paper']['zones'] + constants_images.IMAGES_INFO['virgin_paper']['zones']:
         return(False)
     
     diameter = st.session_state['diameter']
-    paper_zone = zone.split('-')[0]
+    paper_zone = ' '.join(zone.split('-')[:-1])
     valve_name_with_flags = valve_selection_paper(zone, pressure, diameter)
     valve, valve_flags = separate_valve_name_and_flags(valve_name_with_flags)
     
@@ -735,7 +797,7 @@ def print_selected_series_paper():
         st.write('')
         st.write('')
         st.write('')
-        st.caption(get_flags_messages(valve_flags) + '  \n' + '*Diámetros superiores bajo consulta')
+        st.caption(get_flags_messages(valve_flags)) #+ '  \n' + '*Diámetros superiores bajo consulta')
         return(True)
 
 def insert_paper_zone_image(): #UNUSED
@@ -743,13 +805,13 @@ def insert_paper_zone_image(): #UNUSED
     if zone is None:
         return()
     
-    image_name = ZONE_TO_IMAGE_NAME[zone]
+    image_name = constants_images.ZONE_TO_IMAGE_NAME[zone]
     image = st.session_state['images'][image_name + '_dark']
     #image = resize_image_by_expanding_height(image, 1120/644 * 4/3 * 18/20 * 0.99) 
     st.image(image)
 
 def make_goback_paper_thumbnail(): #UNUSED
-    paper_diagram_URL = [f"data:image/webp;base64,{st.session_state['images']['recycled_paper_plant_diagram_light']}"]
+    paper_diagram_URL = [f"data:image/webp;base64,{st.session_state['images']['recycled_paper_diagram']}"]
     paper_diagram_index = clickable_images([paper_diagram_URL], 
                                             div_style = {"display": "flex", "justify-content": "center"}, 
                                             img_style = {"cursor": "pointer", "width": "100%", "border-radius": "8px"})
@@ -820,23 +882,27 @@ if selected_segment == 'paper':
     diagram_column, data_column = st.columns([1, 1])
 
     with diagram_column:
+        generate_paper_buttons()
         diagram_key = select_diagram_key(selected_segment, selected_zone)
         make_interactive_image(diagram_key)
 
     with data_column:
-        add_vertical_spacing(DATA_COLUMN_SPACING)
         dropdowns_column, go_back_column = st.columns([18, 2])
         
         with dropdowns_column:
             double_spacing = generate_dropdowns_paper()
             if not print_selected_series_paper():
-                if selected_zone in [None, 'Papel-reciclado']:
+                if selected_zone in [None, 'Papel-reciclado', 'Papel-virgen']:
                     generate_empty_state_panel('Elegir sector de la planta')
+                elif selected_zone in (constants_images.IMAGES_INFO['recycled_paper']['zones'] + constants_images.IMAGES_INFO['virgin_paper']['zones']):
+                    generate_empty_state_panel('Elegir zona y condiciones de trabajo', double_spacing)
                 else:
+                    st.caption('*Diámetros y presiones superiores bajo consulta')
                     generate_empty_state_panel('Elegir zona y condiciones de trabajo', double_spacing)
 
         with go_back_column:
             generate_go_back_button()
+        
 
 
 if st.session_state['rerun']: #Reruns on some selections, to avoid input lag

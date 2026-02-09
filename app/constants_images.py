@@ -43,16 +43,26 @@ ZONE_WRAPPER_POINTS_MINE = {'Molienda': [(2995, 2322), (3821, 1964), (4285, 2404
 ZONE_POINTS_RECYCLED_PAPER = {'Pulper': [(289, 527), (287, 480), (286, 402), (293, 387), (320, 368), (344, 364), (366, 364), (391, 374), (405, 387), (408, 404), (408, 420), (413, 419), (425, 405), (446, 405), (459, 414), (460, 452), (448, 463), (437, 465), (437, 471), (477, 485), (473, 494), (421, 476), (406, 474), (408, 483), (410, 529), (384, 547), (365, 535), (363, 524), (329, 523), (329, 534), (309, 544)], 
                               'Depuración': [(517, 538), (517, 511), (496, 509), (496, 493), (514, 493), (516, 403), (509, 402), (509, 372), (519, 371), (521, 352), (718, 357), (775, 362), (940, 363), (947, 392), (942, 456), (934, 498), (944, 500), (944, 511), (740, 509), (738, 516), (717, 515), (715, 543)], 
                               'Destintado': [(960, 355), (1010, 362), (1030, 346), (1031, 330), (1055, 338), (1051, 377), (1059, 378), (1064, 332), (1032, 322), (1025, 304), (1029, 299), (1052, 296), (1067, 282), (1068, 267), (1091, 274), (1088, 315), (1094, 316), (1101, 268), (1069, 258), (1061, 245), (1060, 236), (1052, 238), (1039, 233), (1022, 233), (1015, 224), (1011, 233), (996, 240), (987, 249), (987, 273), (994, 286), (994, 293), (985, 292), (977, 283), (974, 293), (959, 299), (951, 308), (948, 336)], 
-                              'Espesado': [(907, 321), (933, 272), (921, 253), (937, 225), (920, 221), (923, 196), (904, 189), (900, 200), (793, 168), (783, 183), (759, 176), (755, 182), (747, 179), (740, 190), (740, 197), (745, 199), (729, 226), (751, 233), (726, 271)], 
+                              'Dispersión-y-espesado': [(907, 321), (933, 272), (921, 253), (937, 225), (920, 221), (923, 196), (904, 189), (900, 200), (793, 168), (783, 183), (759, 176), (755, 182), (747, 179), (740, 190), (740, 197), (745, 199), (729, 226), (751, 233), (726, 271)], 
                               'Blanqueo': [(628, 255), (628, 245), (620, 239), (621, 211), (628, 196), (644, 191), (658, 198), (665, 197), (669, 175), (660, 173), (658, 155), (671, 143), (671, 123), (680, 111), (693, 109), (702, 118), (702, 129), (693, 145), (691, 190), (707, 184), (722, 190), (723, 210), (715, 216), (715, 225), (696, 227), (689, 240), (682, 241), (680, 258)], 
                               'Refinado': [(591, 210), (598, 210), (599, 202), (593, 201), (599, 186), (585, 178), (563, 176), (561, 183), (566, 185), (557, 192), (557, 203), (566, 215), (581, 219)]}
 ZONE_WRAPPER_POINTS_RECYCLED_PAPER = {'Pulper': [(171, 625), (192, 335), (492, 336), (495, 625)], 
                                       'Depuración': [(499, 331), (500, 619), (1005, 616), (1005, 422), (964, 389), (953, 368), (932, 349)], 
                                       'Destintado': [(954, 367), (936, 349), (930, 331), (986, 195), (1038, 188), (1118, 243), (1118, 425), (1034, 417)], 
-                                      'Espesado': [(983, 163), (918, 351), (742, 340), (689, 309), (767, 103)], 
+                                      'Dispersión-y-espesado': [(983, 163), (918, 351), (742, 340), (689, 309), (767, 103)], 
                                       'Blanqueo': [(682, 311), (774, 71), (661, 58), (570, 308)], 
                                       'Refinado': [(640, 93), (568, 289), (482, 280), (489, 133), (558, 84)]}
 
+ZONE_POINTS_VIRGIN_PAPER = {'Cocción': [(389, 675), (389, 662), (381, 648), (378, 519), (382, 484), (382, 461), (397, 462), (421, 451), (427, 421), (427, 387), (435, 387), (436, 417), (444, 448), (446, 492), (478, 505), (490, 503), (489, 514), (496, 517), (496, 540), (504, 548), (507, 687), (486, 695)], 
+                            'Cribado-y-lavado': [(620, 709), (605, 708), (580, 699), (555, 697), (555, 687), (548, 680), (547, 634), (569, 607), (589, 631), (601, 633), (613, 619), (624, 634), (703, 637), (758, 585), (773, 592), (773, 595), (764, 604), (803, 615), (803, 621), (710, 712), (674, 701)], 
+                            'Deslignificación': [(847, 661), (838, 653), (843, 486), (852, 479), (865, 481), (869, 490), (886, 496), (897, 489), (908, 501), (904, 661), (907, 664), (908, 677), (884, 683)], 
+                            'Blanqueo': [(1209, 645), (1181, 644), (939, 573), (944, 417), (960, 412), (978, 420), (972, 516), (986, 524), (1002, 520), (1016, 530), (1041, 531), (1048, 459), (1066, 444), (1077, 464), (1073, 554), (1087, 555), (1103, 550), (1119, 558), (1138, 562), (1142, 493), (1140, 477), (1160, 467), (1177, 482), (1168, 581), (1183, 584), (1199, 577), (1214, 588)], 
+                            'Recuperación-de-licor': [(393, 372), (339, 376), (334, 338), (353, 311), (354, 281), (377, 268), (418, 273), (449, 266), (450, 184), (441, 181), (439, 163), (485, 148), (515, 162), (515, 183), (527, 191), (530, 208), (551, 217), (552, 251), (568, 254), (570, 235), (630, 208), (658, 196), (663, 239), (622, 259), (658, 267), (714, 237), (730, 245), (730, 301), (757, 338), (760, 360), (733, 399), (729, 417), (707, 416), (678, 429)]}
+ZONE_WRAPPER_POINTS_VIRGIN_PAPER = {'Cocción': [(306, 750), (516, 776), (516, 425), (431, 384), (313, 434)], 
+                                    'Cribado-y-lavado': [(529, 768), (534, 507), (800, 521), (807, 765)], 
+                                    'Deslignificación': [(822, 757), (821, 442), (924, 497), (936, 637), (1047, 717), (1047, 761)], 
+                                    'Blanqueo': [(920, 486), (876, 461), (908, 358), (1259, 467), (1261, 701), (1131, 686), (942, 610)], 
+                                    'Recuperación-de-licor': [(296, 373), (289, 221), (386, 98), (641, 129), (815, 227), (800, 448), (588, 439), (522, 367)]}
 
 ZONE_POINTS_PULPER = {'Papel-reciclado': [(5, 4), (5, 132), (228, 132), (228, 4)], 
                       'Pulper-1': [(25, 260), (120, 260), (120, 350), (25, 350)], 
@@ -78,9 +88,9 @@ ZONE_POINTS_DESTINTADO = {'Papel-reciclado': [(25, 15), (25, 144), (250, 144), (
 ZONE_WRAPPER_POINTS_DESTINTADO = ZONE_POINTS_DESTINTADO
 
 ZONE_POINTS_ESPESADO = {'Papel-reciclado': [(12, 511), (233, 511), (234, 640), (11, 640)], 
-                        'Espesado-1': [(320, 230), (425, 230), (425, 310), (320, 310)], 
-                        'Espesado-2': [(455, 470), (565, 470), (565, 560), (455, 560)], 
-                        'Espesado-3': [(835, 175), (975, 175), (975, 250), (835, 250)]}
+                        'Dispersión-y-espesado-1': [(320, 230), (425, 230), (425, 310), (320, 310)], 
+                        'Dispersión-y-espesado-2': [(455, 470), (565, 470), (565, 560), (455, 560)], 
+                        'Dispersión-y-espesado-3': [(835, 175), (975, 175), (975, 250), (835, 250)]}
 ZONE_WRAPPER_POINTS_ESPESADO = ZONE_POINTS_ESPESADO
 
 ZONE_POINTS_BLANQUEO = {'Papel-reciclado': [(21, 20), (187, 20), (187, 115), (21, 115)], 
@@ -97,8 +107,46 @@ ZONE_POINTS_REFINADO = {'Papel-reciclado': [(4, 135), (4, 8), (227, 8), (227, 13
                         'Refinado-3': [(820, 240), (820, 145), (930, 145), (930, 240)]}
 ZONE_WRAPPER_POINTS_REFINADO = ZONE_POINTS_REFINADO
 
+ZONE_POINTS_COCCION = {'Papel-virgen': [(11, 505), (202, 505), (202, 621), (11, 621)], 
+                       'Cocción-1': [(425, 545), (530, 545), (530, 625), (425, 625)],
+                       'Cocción-2': [(700, 470), (785, 470), (785, 560), (700, 560)]}
+ZONE_WRAPPER_POINTS_COCCION = ZONE_POINTS_COCCION
+
+ZONE_POINTS_CRIBADO = {'Papel-virgen': [(25, 7), (280, 7), (280, 162), (25, 162)],
+                       'Cribado-y-lavado-1': [(180, 300), (270, 300), (270, 410), (180, 410)],
+                       'Cribado-y-lavado-2': [(355, 305), (450, 305), (450, 410), (355, 410)],
+                       'Cribado-y-lavado-3': [(380, 435), (520, 435), (520, 520), (380, 520)],
+                       'Cribado-y-lavado-4': [(560, 470), (770, 470), (770, 640), (560, 640)],
+                       'Cribado-y-lavado-5': [(1085, 40), (1220, 40), (1220, 110), (1085, 110)]}
+ZONE_WRAPPER_POINTS_CRIBADO = ZONE_POINTS_CRIBADO
+
+ZONE_POINTS_DESLIGNIFICACION = {'Papel-virgen': [(8, 355), (136, 355), (136, 433), (8, 433)],
+                                'Deslignificación-1': [(25, 215), (870, 215), (870, 340), (25, 340)],
+                                'Deslignificación-2': [(885, 185), (975, 185), (975, 230), (885, 230)],
+                                'Deslignificación-3': [(1050, 65), (1125, 65), (1125, 100), (1050, 100)]}
+ZONE_WRAPPER_POINTS_DESLIGNIFICACION = ZONE_POINTS_DESLIGNIFICACION
+
+ZONE_POINTS_MEZCLA = {'Papel-virgen': [(975, 17), (1230, 17), (1230, 172), (975, 172)], #UNUSED
+                      'Mezcla-y-preparación-de-pasta-1': [(345, 295), (435, 295), (435, 370), (345, 370)],
+                      'Mezcla-y-preparación-de-pasta-2': [(675, 140), (775, 140), (775, 210), (675, 210)],
+                      'Mezcla-y-preparación-de-pasta-3': [(570, 295), (625, 295), (625, 370), (570, 370)],
+                      'Mezcla-y-preparación-de-pasta-4': [(635, 295), (685, 295), (685, 370), (635, 370)],
+                      'Mezcla-y-preparación-de-pasta-5': [(755, 295), (810, 295), (810, 370), (755, 370)],
+                      'Mezcla-y-preparación-de-pasta-6': [(820, 295), (880, 295), (880, 370), (820, 370)]}
+ZONE_WRAPPER_POINTS_MEZCLA = ZONE_POINTS_MEZCLA
+
+ZONE_POINTS_RECUPERACION = {'Papel-virgen': [(1125, 16), (1380, 16), (1380, 171), (1125, 171)],
+                            'Recuperación-de-licor-1': [(65, 95), (205, 95), (205, 170), (65, 170)],
+                            'Recuperación-de-licor-2': [(285, 195), (500, 195), (500, 300), (285, 300)],
+                            'Recuperación-de-licor-3': [(850, 245), (940, 245), (940, 350), (850, 350)],
+                            'Recuperación-de-licor-4': [(1255, 320), (1390, 320), (1390, 405), (1255, 405)],
+                            'Recuperación-de-licor-5': [(835, 505), (925, 505), (925, 620), (835, 620)],
+                            'Recuperación-de-licor-6': [(430, 505), (685, 505), (685, 620), (430, 620)]}
+ZONE_WRAPPER_POINTS_RECUPERACION = ZONE_POINTS_RECUPERACION
+
 
 MINE_INFO = make_image_info_dict(ZONE_POINTS_MINE, ZONE_WRAPPER_POINTS_MINE, 5388, 3404, 5, LIGHT_BLUE)
+
 RECYCLED_PAPER_INFO = make_image_info_dict(ZONE_POINTS_RECYCLED_PAPER, ZONE_WRAPPER_POINTS_RECYCLED_PAPER, 1120, 644, 1, LIGHT_BLUE)
 PULPER_INFO = make_image_info_dict(ZONE_POINTS_PULPER, ZONE_WRAPPER_POINTS_PULPER, 1280, 520, 1, ALICE_BLUE)
 DEPURACION_INFO = make_image_info_dict(ZONE_POINTS_DEPURACION, ZONE_WRAPPER_POINTS_DEPURACION, 1280, 524, 1, ALICE_BLUE)
@@ -107,19 +155,48 @@ ESPESADO_INFO = make_image_info_dict(ZONE_POINTS_ESPESADO, ZONE_WRAPPER_POINTS_E
 BLANQUEO_INFO = make_image_info_dict(ZONE_POINTS_BLANQUEO, ZONE_WRAPPER_POINTS_BLANQUEO, 863, 592, 1, ALICE_BLUE)
 REFINADO_INFO = make_image_info_dict(ZONE_POINTS_REFINADO, ZONE_WRAPPER_POINTS_REFINADO, 1280, 664, 1, ALICE_BLUE)
 
+VIRGIN_PAPER_INFO = make_image_info_dict(ZONE_POINTS_VIRGIN_PAPER, ZONE_WRAPPER_POINTS_VIRGIN_PAPER, 1276, 775, 1, LIGHT_BLUE)
+COCCION_INFO = make_image_info_dict(ZONE_POINTS_COCCION, ZONE_WRAPPER_POINTS_COCCION, 825, 627, 1, ALICE_BLUE)
+CRIBADO_INFO = make_image_info_dict(ZONE_POINTS_CRIBADO, ZONE_WRAPPER_POINTS_CRIBADO, 1228, 710, 1, ALICE_BLUE)
+DESLIGNIFICACION_INFO = make_image_info_dict(ZONE_POINTS_DESLIGNIFICACION, ZONE_WRAPPER_POINTS_DESLIGNIFICACION, 1130, 443, 1, ALICE_BLUE)
+RECUPERACION_INFO = make_image_info_dict(ZONE_POINTS_RECUPERACION, ZONE_WRAPPER_POINTS_RECUPERACION, 1408, 694, 1, ALICE_BLUE)
+
+
+ZONE_TO_IMAGE_NAME = {'Pulper': 'pulper', 
+                      'Depuración': 'depuracion', 
+                      'Destintado': 'destintado', 
+                      'Dispersión-y-espesado': 'espesado', 
+                      'Blanqueo': 'blanqueo', 
+                      'Refinado': 'refinado', 
+
+                      'Cocción': 'coccion', 
+                      'Cribado-y-lavado': 'cribado', 
+                      'Deslignificación': 'deslignificacion', 
+                      'Recuperación-de-licor': 'recuperacion'}
+
 IMAGES_INFO = {'mine': MINE_INFO, 
                'recycled_paper': RECYCLED_PAPER_INFO, 
+               'virgin_paper': VIRGIN_PAPER_INFO, 
+
                'pulper': PULPER_INFO, 
                'depuracion': DEPURACION_INFO, 
                'destintado': DESTINTADO_INFO, 
                'espesado': ESPESADO_INFO, 
                'blanqueo': BLANQUEO_INFO, 
-               'refinado': REFINADO_INFO}
+               'refinado': REFINADO_INFO, 
+
+               'coccion': COCCION_INFO, 
+               'cribado': CRIBADO_INFO, 
+               'deslignificacion': DESLIGNIFICACION_INFO, 
+               'recuperacion': RECUPERACION_INFO}
 
 DIAGRAM_KEYS_TO_NAMES = {'mine_diagram': 'mine', 
                          'mine_diagram_light': 'mine', 
-                         'recycled_paper_plant_diagram': 'recycled_paper', 
-                         'recycled_paper_plant_diagram_light': 'recycled_paper', 
+                         'recycled_paper_diagram': 'recycled_paper', 
+                         'recycled_paper_diagram_light': 'recycled_paper', 
+                         'virgin_paper_diagram': 'virgin_paper', 
+                         'virgin_paper_diagram_light': 'virgin_paper', 
+
                          'pulper_dark': 'pulper', 
                          'pulper_light': 'pulper', 
                          'depuracion_dark': 'depuracion', 
@@ -131,11 +208,25 @@ DIAGRAM_KEYS_TO_NAMES = {'mine_diagram': 'mine',
                          'blanqueo_dark': 'blanqueo', 
                          'blanqueo_light': 'blanqueo', 
                          'refinado_dark': 'refinado', 
-                         'refinado_light': 'refinado'}
+                         'refinado_light': 'refinado', 
+                        
+                         'coccion_dark': 'coccion',
+                         'coccion_light': 'coccion',
+                         'cribado_dark': 'cribado',
+                         'cribado_light': 'cribado',
+                         'deslignificacion_dark': 'deslignificacion',
+                         'deslignificacion_light': 'deslignificacion',
+                         'recuperacion_dark': 'recuperacion',
+                         'recuperacion_light': 'recuperacion'}
 
 
 
 
+#VIRGIN_PAPER_INFO = 1276, 775
+#coccion 11, 505 [191 116] 825 627
+#cribado 25 7 [255 155] 1228 710
+#deslignificacion 8 355 [128 78] 1130 443
+#recuperacion 1125 16 [255 155] 1408 694
 
 
 

@@ -57,19 +57,34 @@ def make_squares_directly_from_points_list(all_x, all_y):
     squares = get_squares_lists_from_pairs_of_points(pairs_list)
     return(squares)
 
+def make_precise_square(xy, xylen):
+    (x1, y1), (xlen, ylen) = xy, xylen
+    p1 = (x1, y1)
+    p2 = (x1 + xlen, y1)
+    p3 = (x1 + xlen, y1 + ylen)
+    p4 = (x1, y1 + ylen)
+    return([p1, p2, p3, p4])
 
 
 
-x = [5.840281767980034, 4.866901473316695, 229.71861842123127, 229.71861842123127]
-y = [4.850769260726268, 130.97014552528768, 132.91045322957814, 3.880607081723365]
+
+
+
+x = [295.85724520969643, 288.722831206592, 386.2262564047807, 640.6863905097151, 815.0827337394327, 800.0212374174957, 588.3674875408, 521.7797565656758]
+y = [373.1627900002985, 221.1709935494543, 97.67760806828177, 128.55094301993248, 226.71233612848485, 448.36708150034093, 438.86760148857195, 366.82980332578586]
 
 
 
 
+
+
+#recuperacion 1125 16 [255 155] 1408 694
+#print(make_precise_square((1125, 16), (255, 155)))
 
 #squares = make_squares_directly_from_points_list(x, y)
 #for square in squares:
 #    print(square)
+
 
 print(get_points_list(x, y))
 
