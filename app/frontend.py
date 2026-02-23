@@ -649,12 +649,12 @@ def generate_dropdowns_paper():
     available_valves_string = constants_valves.ZONE_TO_AVAILABLE_VALVES_STRING[selected_zone]
 
     with pressure_column:
-        st.selectbox('Presión máxima en la válvula (bar)', 
+        st.selectbox('Presión máxima (bar)', 
                      get_available_pressures(selected_zone), 
                      index = None, 
                      label_visibility = 'collapsed', 
                      accept_new_options = False, 
-                     placeholder = 'Presión máxima en la válvula (bar)', 
+                     placeholder = 'Presión máxima (bar)', 
                      key = 'pressure')
         
         if available_valves_string == 'TL/TK/HK':

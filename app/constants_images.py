@@ -64,8 +64,7 @@ ZONE_WRAPPER_POINTS_VIRGIN_PAPER = {'Cocción': [(306, 750), (516, 776), (516, 4
                                     'Blanqueo': [(920, 486), (876, 461), (908, 358), (1259, 467), (1261, 701), (1131, 686), (942, 610)], 
                                     'Recuperación-de-licor': [(296, 373), (289, 221), (386, 98), (641, 129), (815, 227), (800, 448), (588, 439), (522, 367)]}
 
-ZONE_POINTS_PULPER = {'Papel-reciclado': [(5, 4), (5, 132), (228, 132), (228, 4)], 
-                      'Pulper-1': [(25, 260), (120, 260), (120, 350), (25, 350)], 
+ZONE_POINTS_PULPER = {'Pulper-1': [(25, 260), (120, 260), (120, 350), (25, 350)], 
                       'Pulper-2': [(325, 260), (405, 260), (405, 350), (325, 350)], 
                       'Pulper-3': [(535, 260), (605, 260), (605, 350), (535, 350)], 
                       'Pulper-4': [(195, 340), (320, 340), (320, 450), (195, 450)], 
@@ -75,59 +74,50 @@ ZONE_POINTS_PULPER = {'Papel-reciclado': [(5, 4), (5, 132), (228, 132), (228, 4)
                       'Pulper-8': [(980, 260), (1085, 260), (1085, 345), (980, 345)]}
 ZONE_WRAPPER_POINTS_PULPER = ZONE_POINTS_PULPER
 
-ZONE_POINTS_DEPURACION = {'Papel-reciclado': [(15, 27), (15, 124), (182, 122), (181, 27)], 
-                          'Depuración-1': [(265, 230), (545, 230), (545, 340), (265, 340)], 
+ZONE_POINTS_DEPURACION = {'Depuración-1': [(265, 230), (545, 230), (545, 340), (265, 340)], 
                           'Depuración-2': [(775, 290), (860, 290), (860, 360), (775, 360)], 
                           'Depuración-3': [(870, 235), (1150, 235), (1150, 340), (870, 340)]}
 ZONE_WRAPPER_POINTS_DEPURACION = ZONE_POINTS_DEPURACION
 
-ZONE_POINTS_DESTINTADO = {'Papel-reciclado': [(25, 15), (25, 144), (250, 144), (250, 15)], 
-                          'Destintado-1': [(250, 385), (360, 385), (360, 470), (250, 470)], 
+ZONE_POINTS_DESTINTADO = {'Destintado-1': [(250, 385), (360, 385), (360, 470), (250, 470)], 
                           'Destintado-2': [(645, 190), (760, 190), (760, 270), (645, 270)], 
                           'Destintado-3': [(995, 75), (1100, 75), (1100, 160), (995, 160)]}
 ZONE_WRAPPER_POINTS_DESTINTADO = ZONE_POINTS_DESTINTADO
 
-ZONE_POINTS_ESPESADO = {'Papel-reciclado': [(12, 511), (233, 511), (234, 640), (11, 640)], 
-                        'Dispersión-y-espesado-1': [(320, 230), (425, 230), (425, 310), (320, 310)], 
+ZONE_POINTS_ESPESADO = {'Dispersión-y-espesado-1': [(320, 230), (425, 230), (425, 310), (320, 310)], 
                         'Dispersión-y-espesado-2': [(455, 470), (565, 470), (565, 560), (455, 560)], 
                         'Dispersión-y-espesado-3': [(835, 175), (975, 175), (975, 250), (835, 250)]}
 ZONE_WRAPPER_POINTS_ESPESADO = ZONE_POINTS_ESPESADO
 
-ZONE_POINTS_BLANQUEO = {'Papel-reciclado': [(21, 20), (187, 20), (187, 115), (21, 115)], 
-                        'Blanqueo-1': [(20, 325), (20, 430), (150, 430), (150, 325)], 
+ZONE_POINTS_BLANQUEO = {'Blanqueo-1': [(20, 325), (20, 430), (150, 430), (150, 325)], 
                         'Blanqueo-2': [(170, 290), (170, 225), (300, 225), (300, 290)], 
                         'Blanqueo-3': [(285, 525), (285, 440), (405, 440), (405, 525)], 
                         'Blanqueo-4': [(445, 525), (445, 440), (585, 440), (585, 525)], 
                         'Blanqueo-5': [(665, 525), (665, 440), (765, 440), (765, 525)]}
 ZONE_WRAPPER_POINTS_BLANQUEO = ZONE_POINTS_BLANQUEO
 
-ZONE_POINTS_REFINADO = {'Papel-reciclado': [(4, 135), (4, 8), (227, 8), (227, 135)], 
-                        'Refinado-1': [(250, 592), (250, 500), (385, 500), (385, 595)], 
+ZONE_POINTS_REFINADO = {'Refinado-1': [(250, 592), (250, 500), (385, 500), (385, 595)], 
                         'Refinado-2': [(510, 375), (510, 285), (710, 285), (710, 375)], 
                         'Refinado-3': [(820, 240), (820, 145), (930, 145), (930, 240)]}
 ZONE_WRAPPER_POINTS_REFINADO = ZONE_POINTS_REFINADO
 
-ZONE_POINTS_COCCION = {'Papel-virgen': [(11, 505), (202, 505), (202, 621), (11, 621)], 
-                       'Cocción-1': [(425, 545), (530, 545), (530, 625), (425, 625)],
+ZONE_POINTS_COCCION = {'Cocción-1': [(425, 545), (530, 545), (530, 625), (425, 625)],
                        'Cocción-2': [(700, 470), (785, 470), (785, 560), (700, 560)]}
 ZONE_WRAPPER_POINTS_COCCION = ZONE_POINTS_COCCION
 
-ZONE_POINTS_CRIBADO = {'Papel-virgen': [(25, 7), (280, 7), (280, 162), (25, 162)],
-                       'Cribado-y-lavado-1': [(180, 300), (270, 300), (270, 410), (180, 410)],
+ZONE_POINTS_CRIBADO = {'Cribado-y-lavado-1': [(180, 300), (270, 300), (270, 410), (180, 410)],
                        'Cribado-y-lavado-2': [(355, 305), (450, 305), (450, 410), (355, 410)],
                        'Cribado-y-lavado-3': [(380, 435), (520, 435), (520, 520), (380, 520)],
                        'Cribado-y-lavado-4': [(560, 470), (770, 470), (770, 640), (560, 640)],
                        'Cribado-y-lavado-5': [(1085, 40), (1220, 40), (1220, 110), (1085, 110)]}
 ZONE_WRAPPER_POINTS_CRIBADO = ZONE_POINTS_CRIBADO
 
-ZONE_POINTS_DESLIGNIFICACION = {'Papel-virgen': [(8, 355), (136, 355), (136, 433), (8, 433)],
-                                'Deslignificación-1': [(25, 215), (870, 215), (870, 340), (25, 340)],
+ZONE_POINTS_DESLIGNIFICACION = {'Deslignificación-1': [(25, 215), (870, 215), (870, 340), (25, 340)],
                                 'Deslignificación-2': [(885, 185), (975, 185), (975, 230), (885, 230)],
                                 'Deslignificación-3': [(1050, 65), (1125, 65), (1125, 100), (1050, 100)]}
 ZONE_WRAPPER_POINTS_DESLIGNIFICACION = ZONE_POINTS_DESLIGNIFICACION
 
-ZONE_POINTS_MEZCLA = {'Papel-virgen': [(975, 17), (1230, 17), (1230, 172), (975, 172)], #UNUSED
-                      'Mezcla-y-preparación-de-pasta-1': [(345, 295), (435, 295), (435, 370), (345, 370)],
+ZONE_POINTS_MEZCLA = {'Mezcla-y-preparación-de-pasta-1': [(345, 295), (435, 295), (435, 370), (345, 370)],
                       'Mezcla-y-preparación-de-pasta-2': [(675, 140), (775, 140), (775, 210), (675, 210)],
                       'Mezcla-y-preparación-de-pasta-3': [(570, 295), (625, 295), (625, 370), (570, 370)],
                       'Mezcla-y-preparación-de-pasta-4': [(635, 295), (685, 295), (685, 370), (635, 370)],
@@ -135,8 +125,7 @@ ZONE_POINTS_MEZCLA = {'Papel-virgen': [(975, 17), (1230, 17), (1230, 172), (975,
                       'Mezcla-y-preparación-de-pasta-6': [(820, 295), (880, 295), (880, 370), (820, 370)]}
 ZONE_WRAPPER_POINTS_MEZCLA = ZONE_POINTS_MEZCLA
 
-ZONE_POINTS_RECUPERACION = {'Papel-virgen': [(1125, 16), (1380, 16), (1380, 171), (1125, 171)],
-                            'Recuperación-de-licor-1': [(65, 95), (205, 95), (205, 170), (65, 170)],
+ZONE_POINTS_RECUPERACION = {'Recuperación-de-licor-1': [(65, 95), (205, 95), (205, 170), (65, 170)],
                             'Recuperación-de-licor-2': [(285, 195), (500, 195), (500, 300), (285, 300)],
                             'Recuperación-de-licor-3': [(850, 245), (940, 245), (940, 350), (850, 350)],
                             'Recuperación-de-licor-4': [(1255, 320), (1390, 320), (1390, 405), (1255, 405)],

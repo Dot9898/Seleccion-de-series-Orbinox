@@ -1,16 +1,14 @@
 
--Usar set selected zone para todos los cambios de st selected zone y segment
--Cambiar fotos manteniendo los pixeles o el aspect ratio (no mini diagrama)
+-Cambiar zona highlight de recuperación de licor
 -Velocidad (load img from github raw link, so that its cached in browser)
 -Hosting
-
 
 -Cambiar color texto?
 -Agregar el PDF descargable
 
+-Usar set selected zone para todos los cambios de st selected zone y segment?
 -preguntar lourdes blanqueo 10-15 pero valvulas unidireccionales (max 5)
 -Añadir segundas opciones?
 -Hacerlo compatible en pantallas pequeñas y teléfonos, eso queda para el final
--Cambiar lenguaje foto? O eliminar texto
 -Ajustar alineamientos, tamaño de letra, colores, básicamente que quede bonito / tamaño letra botones
 
