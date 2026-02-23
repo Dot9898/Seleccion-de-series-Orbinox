@@ -65,8 +65,8 @@ def load_images():
     images['recycled_paper_diagram'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'recycled_paper_diagram.webp'))
     #images['recycled_paper_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'recycled_paper_diagram_light.webp'))
     for name in ['pulper', 'depuracion', 'destintado', 'espesado', 'blanqueo', 'refinado']:
-        images[name + '_dark'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper' / (name + '_dark.jpg')))
-        images[name + '_light'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper' / (name + '_light.jpg')))
+        images[name + '_dark'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper' / (name + '_dark.webp')))
+        images[name + '_light'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper' / (name + '_light.webp')))
     
     images['virgin_paper_diagram'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'virgin_paper_diagram.webp'))
     #images['virgin_paper_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'virgin_paper_diagram_light.webp'))

@@ -1,5 +1,6 @@
 
 -Usar set selected zone para todos los cambios de st selected zone y segment
+-Cambiar fotos manteniendo los pixeles o el aspect ratio (no mini diagrama)
 -Velocidad (load img from github raw link, so that its cached in browser)
 -Hosting
 
