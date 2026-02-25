@@ -24,7 +24,6 @@ LABEL_SPACING = 28
 EMPTY_STATE_PANEL_LOWER_SPACING = 20
 EMPTY_STATE_PANEL_UPPER_SPACING = EMPTY_STATE_PANEL_LOWER_SPACING + 15
 
-SOLIDS_CONCENTRATION_TO_INT = {'Menos de 5%': 5, f'5% - 12%': 12, 'Más de 12%': 999, 'No considerar': 0, None: None}
 FLUID_OPTIONS_MINE = {'Molienda': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
                       'Hidrociclones': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
                       'Flotación': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
@@ -163,6 +162,26 @@ def get_available_diameters(selected_zone, pressure):
     available_diameters = sorted(list(set(available_diameters)))
     return(available_diameters)
 
+def format_diameters(diameter):
+    if not isinstance(diameter, (int, float)):
+        return(diameter)
+    formatted = str(diameter) + ' in.'
+    return(formatted)
+
+def format_pressures(pressure):
+    if not isinstance(pressure, (int, float)):
+        return(pressure)
+    formatted = str(pressure) + ' bar'
+    return(formatted)
+
+def format_solids_concentration(solids_concentration):
+    format = {4: 'Menos de 5%', 11: f'5% - 12%', 999: 'Más de 12%', 0: 'No considerar', None: None}
+    try:
+        formatted = format[solids_concentration]
+        return(formatted)
+    except KeyError:
+        return(solids_concentration)
+
 def is_valve_acceptable(valve_name_with_flags, pressure, diameter):
     valve_diameter_to_max_pressure = constants_valves.VALVE_DIAMETERS_AND_PRESSURES[valve_name_with_flags]
     if diameter not in valve_diameter_to_max_pressure.keys():
@@ -184,7 +203,7 @@ def valve_selection_paper(zone, pressure, diameter, solids_concentration = 0, of
         return(None)
     
     if available_valves_string in ['TL/TK/HK', 'EK/TK', 'EK/ET/TK', 'DT/TL/TK/ET', 'JT/CR/DT']:
-        solids_concentration = SOLIDS_CONCENTRATION_TO_INT[st.session_state['solids_concentration']]
+        solids_concentration = st.session_state['solids_concentration']
         if solids_concentration is None:
             return(None)
     
@@ -570,11 +589,11 @@ def generate_title_zone_name_and_logo(selected_zone, selected_segment):
         else:
             super_zone = ' '.join(selected_zone.split('-')[:-1])
         if selected_segment == 'mine':
-            font_size = 1.8
+            font_size = 1.7 #HACER CONSTANTES
             font_weight = 520
         if selected_segment == 'paper':
-            font_size = 1.5
-            font_weight = 500
+            font_size = 1.6
+            font_weight = 520
         st.markdown(f"""
                 <div style="display: flex; flex-direction: column; justify-content: flex-end; height: 150px;">
                     <h4 style="margin: 0; font-size: {font_size}rem; font-weight: {font_weight};">
@@ -658,10 +677,11 @@ def generate_dropdowns_mine():
                      label_visibility = 'visible', 
                      accept_new_options = False, 
                      placeholder = '', 
+                     format_func = format_pressures, 
                      key = 'pressure')
     
     with fluid_column:
-        st.selectbox(':gray[Fluido]', 
+        st.selectbox(':gray[Condición del fluido]', 
                      FLUID_OPTIONS_MINE[st.session_state['selected_zone']], 
                      index = None, 
                      label_visibility = 'visible', 
@@ -682,6 +702,7 @@ def generate_dropdowns_paper():
                      label_visibility = 'visible', 
                      accept_new_options = False, 
                      placeholder = '', 
+                     format_func = format_pressures, 
                      key = 'pressure')
         
         if available_valves_string == 'TL/TK/HK':
@@ -691,16 +712,18 @@ def generate_dropdowns_paper():
                          label_visibility = 'visible', 
                          accept_new_options = False, 
                          placeholder = '', 
+                         format_func = format_pressures, 
                          key = 'off_seat_pressure')
             double_spacing = False
 
         if available_valves_string in ['EK/TK', 'EK/ET/TK', 'DT/TL/TK/ET', 'JT/CR/DT']:
             st.selectbox(':gray[Concentración de sólidos]', 
-                         ['Menos de 5%', f'5% - 12%', 'Más de 12%', 'No considerar'], 
+                         [4, 11, 999, 'No considerar'], 
                          index = None, 
                          label_visibility = 'visible', 
                          accept_new_options = False, 
                          placeholder = '', 
+                         format_func = format_solids_concentration, 
                          key = 'solids_concentration')
             double_spacing = False
 
@@ -711,15 +734,17 @@ def generate_dropdowns_paper():
                      label_visibility = 'visible', 
                      accept_new_options = False, 
                      placeholder = '', 
+                     format_func = format_diameters, 
                      key = 'diameter')
         
         if available_valves_string == 'TL/TK/HK':
             st.selectbox(':gray[Concentración de sólidos]', 
-                         ['Menos de 5%', f'5% - 12%', 'Más de 12%', 'No considerar'], 
+                         [4, 11, 999, 'No considerar'], 
                          index = None, 
                          label_visibility = 'visible', 
                          accept_new_options = False, 
                          placeholder = '', 
+                         format_func = format_solids_concentration, 
                          key = 'solids_concentration')
             double_spacing = False
     
