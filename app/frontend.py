@@ -14,16 +14,17 @@ import constants_valves
 
 ROOT_PATH = Path(__file__).resolve().parent.parent
 IMG_PATH = ROOT_PATH / 'img'
+
 EMPTY_SPACE = '‎'
 LOGO_WIDTH = 200
 BACK_ARROW_HEIGHT = 40
 BACK_ARROW_HEIGHT_STRING = f'{BACK_ARROW_HEIGHT}px'
-DATA_COLUMN_SPACING = 24
+SELECTBOX_SPACING = 24
+LABEL_SPACING = 28
 EMPTY_STATE_PANEL_LOWER_SPACING = 20
 EMPTY_STATE_PANEL_UPPER_SPACING = EMPTY_STATE_PANEL_LOWER_SPACING + 15
 
 SOLIDS_CONCENTRATION_TO_INT = {'Menos de 5%': 5, f'5% - 12%': 12, 'Más de 12%': 999, 'No considerar': 0, None: None}
-
 FLUID_OPTIONS_MINE = {'Molienda': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
                       'Hidrociclones': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
                       'Flotación': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
@@ -99,7 +100,8 @@ def select_diagram_key(selected_segment, selected_zone):
         elif selected_zone == 'Papel-reciclado':
             diagram_key = 'recycled_paper_diagram'
         
-        elif selected_zone in (constants_images.IMAGES_INFO['recycled_paper']['zones'] + constants_images.IMAGES_INFO['virgin_paper']['zones']):
+        elif selected_zone in (constants_images.IMAGES_INFO['recycled_paper']['zones'] + 
+                               constants_images.IMAGES_INFO['virgin_paper']['zones']):
             diagram_name = constants_images.ZONE_TO_IMAGE_NAME[selected_zone]
             diagram_key = f'{diagram_name}_dark'
         
@@ -476,7 +478,7 @@ def add_selected_zone_to_html(selected_zone, diagram_key):
     if selected_zone is None:
         return('')
 
-    zone_id = selected_zone.replace(" ", "_")
+    zone_id = selected_zone.replace(' ', '_')
     diagram_name = constants_images.DIAGRAM_KEYS_TO_NAMES[diagram_key]
 
     image_info = constants_images.IMAGES_INFO[diagram_name]
@@ -530,8 +532,8 @@ def generate_disclaimer():
              'Orbinox no garantiza precisión, conveniencia, ni durabilidad de las selecciones aquí descritas. '\
              'Para más información, contactar con nuestro equipo de ingenieros.')
 
-def generate_title_and_logo():
-    title_column, logo_column = st.columns([3, 1])
+def generate_title_zone_name_and_logo(selected_zone, selected_segment):
+    title_column, zone_name_column, logo_column = st.columns([3, 2, 1])
 
     with title_column:
         st.markdown("""
@@ -541,7 +543,7 @@ def generate_title_and_logo():
                         </h4>
                     </div>
                     """,
-                    unsafe_allow_html=True)
+                    unsafe_allow_html = True)
 
     with logo_column:
         logo = st.session_state['images']['logo_b64']
@@ -555,7 +557,32 @@ def generate_title_and_logo():
                         <img src="data:image/webp;base64,{logo}" width="{LOGO_WIDTH}">
                     </div>
                     """,
-                    unsafe_allow_html=True)
+                    unsafe_allow_html = True)
+    
+    if selected_zone in [None, 'Papel-reciclado', 'Papel-virgen']:
+        return()
+
+    with zone_name_column:
+        if selected_zone in (constants_images.IMAGES_INFO['mine']['zones'] + 
+                             constants_images.IMAGES_INFO['recycled_paper']['zones'] + 
+                             constants_images.IMAGES_INFO['virgin_paper']['zones']):
+            super_zone = selected_zone.replace('-', ' ')
+        else:
+            super_zone = ' '.join(selected_zone.split('-')[:-1])
+        if selected_segment == 'mine':
+            font_size = 1.8
+            font_weight = 520
+        if selected_segment == 'paper':
+            font_size = 1.5
+            font_weight = 500
+        st.markdown(f"""
+                <div style="display: flex; flex-direction: column; justify-content: flex-end; height: 150px;">
+                    <h4 style="margin: 0; font-size: {font_size}rem; font-weight: {font_weight};">
+                        {super_zone}
+                    </h4>
+                </div>
+                """,
+                unsafe_allow_html = True)
 
 def generate_segment_buttons():
     mine_column, paper_column = st.columns([1, 1])
@@ -625,21 +652,21 @@ def generate_dropdowns_mine():
     fluid_column, pressure_column = st.columns([1, 1])
     
     with pressure_column:
-        st.selectbox('Presión máxima en la válvula (bar)', 
+        st.selectbox(':gray[Presión máxima (bar)]', 
                      [10, 16, 20, 50], 
                      index = None, 
-                     label_visibility = 'collapsed', 
+                     label_visibility = 'visible', 
                      accept_new_options = False, 
-                     placeholder = 'Presión máxima en la válvula (bar)', 
+                     placeholder = '', 
                      key = 'pressure')
     
     with fluid_column:
-        st.selectbox('Fluido', 
+        st.selectbox(':gray[Fluido]', 
                      FLUID_OPTIONS_MINE[st.session_state['selected_zone']], 
                      index = None, 
-                     label_visibility = 'collapsed', 
+                     label_visibility = 'visible', 
                      accept_new_options = False, 
-                     placeholder = 'Fluido', 
+                     placeholder = '', 
                      key = 'fluid')
 
 def generate_dropdowns_paper():
@@ -649,50 +676,50 @@ def generate_dropdowns_paper():
     available_valves_string = constants_valves.ZONE_TO_AVAILABLE_VALVES_STRING[selected_zone]
 
     with pressure_column:
-        st.selectbox('Presión máxima (bar)', 
+        st.selectbox(':gray[Presión máxima (bar)]', 
                      get_available_pressures(selected_zone), 
                      index = None, 
-                     label_visibility = 'collapsed', 
+                     label_visibility = 'visible', 
                      accept_new_options = False, 
-                     placeholder = 'Presión máxima (bar)', 
+                     placeholder = '', 
                      key = 'pressure')
         
         if available_valves_string == 'TL/TK/HK':
-            st.selectbox('Contra-presión máxima (bar)', 
-                     [1, 2, 3, 3.5, 'No considerar'], 
-                     index = None, 
-                     label_visibility = 'collapsed', 
-                     accept_new_options = False, 
-                     placeholder = 'Contra-presión máxima (bar)', 
-                     key = 'off_seat_pressure')
+            st.selectbox(':gray[Contra-presión máxima (bar)]', 
+                         [1, 2, 3, 3.5, 'No considerar'], 
+                         index = None, 
+                         label_visibility = 'visible', 
+                         accept_new_options = False, 
+                         placeholder = '', 
+                         key = 'off_seat_pressure')
             double_spacing = False
 
         if available_valves_string in ['EK/TK', 'EK/ET/TK', 'DT/TL/TK/ET', 'JT/CR/DT']:
-            st.selectbox('Concentración de sólidos', 
+            st.selectbox(':gray[Concentración de sólidos]', 
                          ['Menos de 5%', f'5% - 12%', 'Más de 12%', 'No considerar'], 
                          index = None, 
-                         label_visibility = 'collapsed', 
+                         label_visibility = 'visible', 
                          accept_new_options = False, 
-                         placeholder = 'Concentración de sólidos', 
+                         placeholder = '', 
                          key = 'solids_concentration')
             double_spacing = False
 
     with diameter_column:
-        st.selectbox('Diámetro (in.)', 
+        st.selectbox(':gray[Diámetro (in.)]', 
                      get_available_diameters(selected_zone, st.session_state['pressure']), 
                      index = None, 
-                     label_visibility = 'collapsed', 
+                     label_visibility = 'visible', 
                      accept_new_options = False, 
-                     placeholder = 'Diámetro (in.)', 
+                     placeholder = '', 
                      key = 'diameter')
         
         if available_valves_string == 'TL/TK/HK':
-            st.selectbox('Concentración de sólidos', 
+            st.selectbox(':gray[Concentración de sólidos]', 
                          ['Menos de 5%', f'5% - 12%', 'Más de 12%', 'No considerar'], 
                          index = None, 
-                         label_visibility = 'collapsed', 
+                         label_visibility = 'visible', 
                          accept_new_options = False, 
-                         placeholder = 'Concentración de sólidos', 
+                         placeholder = '', 
                          key = 'solids_concentration')
             double_spacing = False
     
@@ -718,10 +745,9 @@ def add_vertical_spacing(pixels):
 
 def generate_empty_state_panel(text, double_spacing = True):
 
-    add_vertical_spacing(DATA_COLUMN_SPACING)
     add_vertical_spacing(EMPTY_STATE_PANEL_UPPER_SPACING)
     if double_spacing:
-        add_vertical_spacing(EMPTY_STATE_PANEL_UPPER_SPACING)
+        add_vertical_spacing(SELECTBOX_SPACING + LABEL_SPACING)
     
     arrow_column = st.columns([7.6, 2.8, 7.6])[1]
     with arrow_column:
@@ -750,7 +776,7 @@ def print_selected_series_mine():
     else:
         valve_name = valve[:2]
         valve_link = constants_valves.VALVE_LINKS[valve_name]
-        st.subheader(zone)
+        #st.subheader(zone)
         st.markdown(f'Serie recomendada: [{valve}]({valve_link})')
         st.write('Material de mangón:', mangon + '*' if mangon == 'Nitrilo' else mangon)
         st.write('Material de tajadera:', tajadera)
@@ -786,7 +812,7 @@ def print_selected_series_paper():
 
     else:
         valve_link = constants_valves.VALVE_LINKS[valve]
-        st.subheader(paper_zone)
+        #st.subheader(paper_zone)
         if 'JT' not in valve_flags:
             st.markdown(f'Serie recomendada: [{valve}]({valve_link})')
         else:
@@ -850,7 +876,7 @@ st.set_page_config(layout = 'wide')
 if st.session_state['show_disclaimer']:
     generate_disclaimer()
 
-generate_title_and_logo()
+generate_title_zone_name_and_logo(selected_zone, selected_segment)
 
 
 if selected_segment is None:
@@ -865,7 +891,6 @@ if selected_segment == 'mine':
         make_interactive_image(diagram_key)
     
     with data_column:
-        add_vertical_spacing(DATA_COLUMN_SPACING)
         dropdowns_column, go_back_column = st.columns([18, 2])
         
         with dropdowns_column:
@@ -874,6 +899,7 @@ if selected_segment == 'mine':
                 generate_empty_state_panel('Elegir sector de la planta, fluido, y presión de trabajo')
         
         with go_back_column:
+            add_vertical_spacing(LABEL_SPACING)
             generate_go_back_button()
 
 
@@ -882,6 +908,7 @@ if selected_segment == 'paper':
     diagram_column, data_column = st.columns([1, 1])
 
     with diagram_column:
+        add_vertical_spacing(LABEL_SPACING)
         generate_paper_buttons()
         diagram_key = select_diagram_key(selected_segment, selected_zone)
         make_interactive_image(diagram_key)
@@ -901,6 +928,7 @@ if selected_segment == 'paper':
                     generate_empty_state_panel('Elegir zona y condiciones de trabajo', double_spacing)
 
         with go_back_column:
+            add_vertical_spacing(LABEL_SPACING)
             generate_go_back_button()
         
 
