@@ -1,4 +1,5 @@
 
+-Cambiar nombre y logo a funciones distintas para ajustar extra spacing en diagram column de mine
 -Cambiar zona highlight de recuperación de licor
 -Velocidad (load img from github raw link, so that its cached in browser)
 -Hosting

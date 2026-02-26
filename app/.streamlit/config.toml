@@ -8,6 +8,10 @@ base = 'light'
 primaryColor = '#1F84B5'
 backgroundColor = 'aliceblue'
 secondaryBackgroundColor = '#66c6f3fa'
+
+#primaryColor = '#1F84B5'
+#secondaryBackgroundColor = '#66c6f3fa'
+
 #1 '#0090D3'
 #2 '#1F84B5'
 #alice bluer '#AEC6F7'

@@ -643,14 +643,16 @@ def generate_paper_buttons():
                 key = 'virgin_button', 
                 width = 'stretch', 
                 on_click = set_selected_zone, 
-                args = ['Papel-virgen'])
+                args = ['Papel-virgen'], 
+                type = 'secondary')
 
     with recycled_column:
         st.button('Papel reciclado', 
                 key = 'recycled_button', 
                 width = 'stretch', 
                 on_click = set_selected_zone, 
-                args = ['Papel-reciclado'])
+                args = ['Papel-reciclado'], 
+                type = 'secondary')
 
 def make_interactive_image(diagram_key):
 
