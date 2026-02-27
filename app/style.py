@@ -1,9 +1,12 @@
 
+from pathlib import Path
 import streamlit as st
+
+ROOT_PATH = Path(__file__).resolve().parent.parent
 
 @st.cache_data
 def style_css():
-    with open('style.css') as css:
+    with open(ROOT_PATH / 'app' / 'style.css') as css:
         style = css.read()
         return(style)
 
