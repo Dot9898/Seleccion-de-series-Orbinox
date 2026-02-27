@@ -17,3 +17,21 @@ print('TK_act_ac2'.split('_')[1:])
 
 
 
+st.markdown(
+    """
+    <style>
+
+    div.stButton > button > div {
+        color: red !important;
+        background-color: yellow !important;
+    }
+
+    div.stButton > button:hover > div {
+        color: white !important;
+        background-color: darkred !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+

@@ -21,8 +21,9 @@ def make_image_info_dict(zone_points, zone_wrapper_points, diagram_x, diagram_y,
     return(image_info)
 
 
-
-LIGHT_BLUE = (0, 120, 255)
+GRAY_BLUE = (161, 202, 228) #'#a1cae4' primary
+LIGHT_BLUE_ORIGINAL = (0, 120, 255) #'#0078FF'
+LIGHT_BLUE = (31, 132, 181) #'#1F84B5' old secondary
 ALICE_BLUE = (174, 198, 247)
 ORANGE = (255, 80, 0)
 
@@ -57,12 +58,12 @@ ZONE_POINTS_VIRGIN_PAPER = {'Cocción': [(389, 675), (389, 662), (381, 648), (37
                             'Cribado-y-lavado': [(620, 709), (605, 708), (580, 699), (555, 697), (555, 687), (548, 680), (547, 634), (569, 607), (589, 631), (601, 633), (613, 619), (624, 634), (703, 637), (758, 585), (773, 592), (773, 595), (764, 604), (803, 615), (803, 621), (710, 712), (674, 701)], 
                             'Deslignificación': [(847, 661), (838, 653), (843, 486), (852, 479), (865, 481), (869, 490), (886, 496), (897, 489), (908, 501), (904, 661), (907, 664), (908, 677), (884, 683)], 
                             'Blanqueo': [(1209, 645), (1181, 644), (939, 573), (944, 417), (960, 412), (978, 420), (972, 516), (986, 524), (1002, 520), (1016, 530), (1041, 531), (1048, 459), (1066, 444), (1077, 464), (1073, 554), (1087, 555), (1103, 550), (1119, 558), (1138, 562), (1142, 493), (1140, 477), (1160, 467), (1177, 482), (1168, 581), (1183, 584), (1199, 577), (1214, 588)], 
-                            'Recuperación-de-licor': [(393, 372), (339, 376), (334, 338), (353, 311), (354, 281), (377, 268), (418, 273), (449, 266), (450, 184), (441, 181), (439, 163), (485, 148), (515, 162), (515, 183), (527, 191), (530, 208), (551, 217), (552, 251), (568, 254), (570, 235), (630, 208), (658, 196), (663, 239), (622, 259), (658, 267), (714, 237), (730, 245), (730, 301), (757, 338), (760, 360), (733, 399), (729, 417), (707, 416), (678, 429)]}
+                            'Recuperación-de-licor': [(393, 372), (339, 376), (334, 338), (353, 311), (354, 281), (377, 268), (418, 273), (449, 266), (450, 184), (441, 181), (439, 163), (455, 158), (455, 143), (463, 140), (463, 157), (485, 148), (515, 162), (515, 183), (527, 191), (530, 208), (551, 217), (552, 251), (568, 254), (570, 235), (630, 208), (658, 196), (663, 239), (622, 259), (658, 267), (714, 237), (730, 245), (730, 301), (757, 338), (760, 360), (733, 399), (729, 417), (707, 416), (678, 429), (644, 407), (661, 399), (629, 390), (629, 347), (637, 340), (642, 347), (653, 347), (699, 364), (705, 348), (705, 336), (692, 326), (669, 333), (669, 308), (625, 291), (580, 283), (519, 285), (497, 285), (476, 294), (469, 290), (438, 304), (438, 331), (429, 337), (418, 331), (407, 330), (407, 352), (390, 355)]}
 ZONE_WRAPPER_POINTS_VIRGIN_PAPER = {'Cocción': [(306, 750), (516, 776), (516, 425), (431, 384), (313, 434)], 
                                     'Cribado-y-lavado': [(529, 768), (534, 507), (800, 521), (807, 765)], 
                                     'Deslignificación': [(822, 757), (821, 442), (924, 497), (936, 637), (1047, 717), (1047, 761)], 
                                     'Blanqueo': [(920, 486), (876, 461), (908, 358), (1259, 467), (1261, 701), (1131, 686), (942, 610)], 
-                                    'Recuperación-de-licor': [(296, 373), (289, 221), (386, 98), (641, 129), (815, 227), (800, 448), (588, 439), (522, 367)]}
+                                    'Recuperación-de-licor': [(283, 424), (289, 221), (386, 98), (641, 129), (815, 227), (796, 455), (528, 474), (527, 392), (429, 365)]}
 
 ZONE_POINTS_PULPER = {'Pulper-1': [(25, 260), (120, 260), (120, 350), (25, 350)], 
                       'Pulper-2': [(325, 260), (405, 260), (405, 350), (325, 350)], 
@@ -137,18 +138,18 @@ ZONE_WRAPPER_POINTS_RECUPERACION = ZONE_POINTS_RECUPERACION
 MINE_INFO = make_image_info_dict(ZONE_POINTS_MINE, ZONE_WRAPPER_POINTS_MINE, 5388, 3404, 5, LIGHT_BLUE)
 
 RECYCLED_PAPER_INFO = make_image_info_dict(ZONE_POINTS_RECYCLED_PAPER, ZONE_WRAPPER_POINTS_RECYCLED_PAPER, 1120, 644, 1, LIGHT_BLUE)
-PULPER_INFO = make_image_info_dict(ZONE_POINTS_PULPER, ZONE_WRAPPER_POINTS_PULPER, 1280, 520, 1, ALICE_BLUE)
-DEPURACION_INFO = make_image_info_dict(ZONE_POINTS_DEPURACION, ZONE_WRAPPER_POINTS_DEPURACION, 1280, 524, 1, ALICE_BLUE)
-DESTINTADO_INFO = make_image_info_dict(ZONE_POINTS_DESTINTADO, ZONE_WRAPPER_POINTS_DESTINTADO, 1280, 534, 1, ALICE_BLUE)
-ESPESADO_INFO = make_image_info_dict(ZONE_POINTS_ESPESADO, ZONE_WRAPPER_POINTS_ESPESADO, 1280, 656, 1, ALICE_BLUE)
-BLANQUEO_INFO = make_image_info_dict(ZONE_POINTS_BLANQUEO, ZONE_WRAPPER_POINTS_BLANQUEO, 863, 592, 1, ALICE_BLUE)
-REFINADO_INFO = make_image_info_dict(ZONE_POINTS_REFINADO, ZONE_WRAPPER_POINTS_REFINADO, 1280, 664, 1, ALICE_BLUE)
+PULPER_INFO = make_image_info_dict(ZONE_POINTS_PULPER, ZONE_WRAPPER_POINTS_PULPER, 1280, 520, 1, GRAY_BLUE)
+DEPURACION_INFO = make_image_info_dict(ZONE_POINTS_DEPURACION, ZONE_WRAPPER_POINTS_DEPURACION, 1280, 524, 1, GRAY_BLUE)
+DESTINTADO_INFO = make_image_info_dict(ZONE_POINTS_DESTINTADO, ZONE_WRAPPER_POINTS_DESTINTADO, 1280, 534, 1, GRAY_BLUE)
+ESPESADO_INFO = make_image_info_dict(ZONE_POINTS_ESPESADO, ZONE_WRAPPER_POINTS_ESPESADO, 1280, 656, 1, GRAY_BLUE)
+BLANQUEO_INFO = make_image_info_dict(ZONE_POINTS_BLANQUEO, ZONE_WRAPPER_POINTS_BLANQUEO, 863, 592, 1, GRAY_BLUE)
+REFINADO_INFO = make_image_info_dict(ZONE_POINTS_REFINADO, ZONE_WRAPPER_POINTS_REFINADO, 1280, 664, 1, GRAY_BLUE)
 
 VIRGIN_PAPER_INFO = make_image_info_dict(ZONE_POINTS_VIRGIN_PAPER, ZONE_WRAPPER_POINTS_VIRGIN_PAPER, 1276, 775, 1, LIGHT_BLUE)
-COCCION_INFO = make_image_info_dict(ZONE_POINTS_COCCION, ZONE_WRAPPER_POINTS_COCCION, 825, 627, 1, ALICE_BLUE)
-CRIBADO_INFO = make_image_info_dict(ZONE_POINTS_CRIBADO, ZONE_WRAPPER_POINTS_CRIBADO, 1228, 710, 1, ALICE_BLUE)
-DESLIGNIFICACION_INFO = make_image_info_dict(ZONE_POINTS_DESLIGNIFICACION, ZONE_WRAPPER_POINTS_DESLIGNIFICACION, 1130, 443, 1, ALICE_BLUE)
-RECUPERACION_INFO = make_image_info_dict(ZONE_POINTS_RECUPERACION, ZONE_WRAPPER_POINTS_RECUPERACION, 1408, 694, 1, ALICE_BLUE)
+COCCION_INFO = make_image_info_dict(ZONE_POINTS_COCCION, ZONE_WRAPPER_POINTS_COCCION, 825, 627, 1, GRAY_BLUE)
+CRIBADO_INFO = make_image_info_dict(ZONE_POINTS_CRIBADO, ZONE_WRAPPER_POINTS_CRIBADO, 1228, 710, 1, GRAY_BLUE)
+DESLIGNIFICACION_INFO = make_image_info_dict(ZONE_POINTS_DESLIGNIFICACION, ZONE_WRAPPER_POINTS_DESLIGNIFICACION, 1130, 443, 1, GRAY_BLUE)
+RECUPERACION_INFO = make_image_info_dict(ZONE_POINTS_RECUPERACION, ZONE_WRAPPER_POINTS_RECUPERACION, 1408, 694, 1, GRAY_BLUE)
 
 
 ZONE_TO_IMAGE_NAME = {'Pulper': 'pulper', 
@@ -208,14 +209,6 @@ DIAGRAM_KEYS_TO_NAMES = {'mine_diagram': 'mine',
                          'recuperacion_dark': 'recuperacion',
                          'recuperacion_light': 'recuperacion'}
 
-
-
-
-#VIRGIN_PAPER_INFO = 1276, 775
-#coccion 11, 505 [191 116] 825 627
-#cribado 25 7 [255 155] 1228 710
-#deslignificacion 8 355 [128 78] 1130 443
-#recuperacion 1125 16 [255 155] 1408 694
 
 
 

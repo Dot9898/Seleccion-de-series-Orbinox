@@ -6,6 +6,7 @@ from PIL import Image
 import base64
 from io import BytesIO
 import streamlit as st
+from style import set_style
 from st_clickable_images import clickable_images
 from st_click_detector import click_detector
 import constants_images
@@ -15,10 +16,15 @@ import constants_valves
 ROOT_PATH = Path(__file__).resolve().parent.parent
 IMG_PATH = ROOT_PATH / 'img'
 
+MAIN_TEXT_COLOR = '#3e4c59'
 EMPTY_SPACE = '‎'
 LOGO_WIDTH = 200
+MIN_LOGO_HEIGHT = 80
+LOGO_HEIGHT = MIN_LOGO_HEIGHT + 0
+TITLE_HEIGHT_ALIGNED_WITH_LOGO = LOGO_HEIGHT + 28
+TITLE_HEIGHT = TITLE_HEIGHT_ALIGNED_WITH_LOGO
+ZONE_HEIGHT = TITLE_HEIGHT
 BACK_ARROW_HEIGHT = 40
-BACK_ARROW_HEIGHT_STRING = f'{BACK_ARROW_HEIGHT}px'
 SELECTBOX_SPACING = 24
 LABEL_SPACING = 28
 EMPTY_STATE_PANEL_LOWER_SPACING = 20
@@ -551,57 +557,63 @@ def generate_disclaimer():
              'Orbinox no garantiza precisión, conveniencia, ni durabilidad de las selecciones aquí descritas. '\
              'Para más información, contactar con nuestro equipo de ingenieros.')
 
-def generate_title_zone_name_and_logo(selected_zone, selected_segment):
-    title_column, zone_name_column, logo_column = st.columns([3, 2, 1])
-
-    with title_column:
-        st.markdown("""
-                    <div style="display: flex; flex-direction: column; justify-content: flex-end; height: 150px;">
-                        <h4 style="margin: 0; font-size: 3rem; font-weight: 450;">
-                            Selección de series
-                        </h4>
-                    </div>
-                    """,
-                    unsafe_allow_html = True)
-
-    with logo_column:
-        logo = st.session_state['images']['logo_b64']
-        st.markdown(f"""
-                    <div style="
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: flex-end;
-                        height: 122px;
-                    ">
-                        <img src="data:image/webp;base64,{logo}" width="{LOGO_WIDTH}">
-                    </div>
-                    """,
-                    unsafe_allow_html = True)
-    
-    if selected_zone in [None, 'Papel-reciclado', 'Papel-virgen']:
-        return()
-
-    with zone_name_column:
-        if selected_zone in (constants_images.IMAGES_INFO['mine']['zones'] + 
-                             constants_images.IMAGES_INFO['recycled_paper']['zones'] + 
-                             constants_images.IMAGES_INFO['virgin_paper']['zones']):
-            super_zone = selected_zone.replace('-', ' ')
-        else:
-            super_zone = ' '.join(selected_zone.split('-')[:-1])
-        if selected_segment == 'mine':
-            font_size = 1.7 #HACER CONSTANTES
-            font_weight = 520
-        if selected_segment == 'paper':
-            font_size = 1.6
-            font_weight = 520
-        st.markdown(f"""
-                <div style="display: flex; flex-direction: column; justify-content: flex-end; height: 150px;">
-                    <h4 style="margin: 0; font-size: {font_size}rem; font-weight: {font_weight};">
-                        {super_zone}
+def generate_title():
+    st.markdown(f"""
+                <div style="display: flex; flex-direction: column; justify-content: flex-end; height: {TITLE_HEIGHT}px;">
+                    <h4 style="margin: 0; font-size: 2.9rem; font-weight: 450; color: {MAIN_TEXT_COLOR}">
+                        Selección de series
                     </h4>
                 </div>
                 """,
                 unsafe_allow_html = True)
+
+def generate_logo():
+    logo = st.session_state['images']['logo_b64']
+    st.markdown(f"""
+                <div style="
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: flex-end;
+                    height: {LOGO_HEIGHT}px;
+                ">
+                    <img src="data:image/webp;base64,{logo}" width="{LOGO_WIDTH}">
+                </div>
+                """,
+                unsafe_allow_html = True)
+    
+def generate_super_zone_name(selected_segment, selected_zone):
+    if selected_zone in [None, 'Papel-reciclado', 'Papel-virgen']:
+        return()
+
+    if selected_zone in (constants_images.IMAGES_INFO['mine']['zones'] + 
+                            constants_images.IMAGES_INFO['recycled_paper']['zones'] + 
+                            constants_images.IMAGES_INFO['virgin_paper']['zones']):
+        super_zone = selected_zone.replace('-', ' ')
+    else:
+        super_zone = ' '.join(selected_zone.split('-')[:-1])
+    if selected_segment == 'mine':
+        font_size = 1.7 #HACER CONSTANTES
+        font_weight = 520
+    if selected_segment == 'paper':
+        font_size = 1.7
+        font_weight = 520
+    st.markdown(f"""
+            <div style="display: flex; flex-direction: column; justify-content: flex-end; height: {ZONE_HEIGHT}px;">
+                <h4 style="margin: 0; font-size: {font_size}rem; font-weight: {font_weight}; color: {MAIN_TEXT_COLOR}">
+                    {super_zone}
+                </h4>
+            </div>
+            """,
+            unsafe_allow_html = True)
+
+def generate_title_zone_name_and_logo(selected_segment, selected_zone):
+    title_column, zone_name_column, logo_column = st.columns([3, 2, 1])
+    with title_column:
+        generate_title()
+    with logo_column:
+        generate_logo()
+    with zone_name_column:
+        generate_super_zone_name(selected_segment, selected_zone)
 
 def generate_segment_buttons():
     mine_column, paper_column = st.columns([1, 1])
@@ -611,7 +623,8 @@ def generate_segment_buttons():
                 key = 'mine_button', 
                 width = 'stretch', 
                 on_click = set_selected_segment, 
-                args = ['mine'])
+                args = ['mine'], 
+                type = 'primary')
 
         mine_image_URL = [f"data:image/webp;base64,{st.session_state['images']['mineria_b64']}"]
         mine_image_index = clickable_images([mine_image_URL], 
@@ -626,7 +639,8 @@ def generate_segment_buttons():
                 key = 'paper_button', 
                 width = 'stretch', 
                 on_click = set_selected_segment, 
-                args = ['paper'])
+                args = ['paper'], 
+                type = 'primary')
 
         paper_image_URL = [f"data:image/webp;base64,{st.session_state['images']['pulpa_y_papel_b64']}"]
         paper_image_index = clickable_images([paper_image_URL], 
@@ -644,7 +658,7 @@ def generate_paper_buttons():
                 width = 'stretch', 
                 on_click = set_selected_zone, 
                 args = ['Papel-virgen'], 
-                type = 'secondary')
+                type = 'primary')
 
     with recycled_column:
         st.button('Papel reciclado', 
@@ -652,7 +666,7 @@ def generate_paper_buttons():
                 width = 'stretch', 
                 on_click = set_selected_zone, 
                 args = ['Papel-reciclado'], 
-                type = 'secondary')
+                type = 'primary')
 
 def make_interactive_image(diagram_key):
 
@@ -758,7 +772,7 @@ def generate_go_back_button():
     clicked_image_index = clickable_images([back_arrow_img], 
                                             titles = ['Volver'], 
                                             div_style = {'display': 'flex', 'justify-content': 'flex-end'}, 
-                                            img_style = {'cursor': 'pointer', 'height': BACK_ARROW_HEIGHT_STRING}, 
+                                            img_style = {'cursor': 'pointer', 'height': f'{BACK_ARROW_HEIGHT}px'}, 
                                             key = 'back_click')
     if clicked_image_index == 0:
         st.session_state['go_back'] = True
@@ -898,12 +912,14 @@ selected_zone = st.session_state['selected_zone']
 
 #Frontend
 
+set_style()
 st.set_page_config(layout = 'wide')
+
 
 if st.session_state['show_disclaimer']:
     generate_disclaimer()
 
-generate_title_zone_name_and_logo(selected_zone, selected_segment)
+generate_title_zone_name_and_logo(selected_segment, selected_zone)
 
 
 if selected_segment is None:
@@ -947,11 +963,14 @@ if selected_segment == 'paper':
             double_spacing = generate_dropdowns_paper()
             if not print_selected_series_paper():
                 if selected_zone in [None, 'Papel-reciclado', 'Papel-virgen']:
+                    add_vertical_spacing(SELECTBOX_SPACING + LABEL_SPACING)
                     generate_empty_state_panel('Elegir sector de la planta')
                 elif selected_zone in (constants_images.IMAGES_INFO['recycled_paper']['zones'] + constants_images.IMAGES_INFO['virgin_paper']['zones']):
+                    add_vertical_spacing(SELECTBOX_SPACING + LABEL_SPACING)
                     generate_empty_state_panel('Elegir zona y condiciones de trabajo', double_spacing)
                 else:
                     st.caption('*Diámetros y presiones superiores bajo consulta')
+                    add_vertical_spacing(SELECTBOX_SPACING)
                     generate_empty_state_panel('Elegir zona y condiciones de trabajo', double_spacing)
 
         with go_back_column:
