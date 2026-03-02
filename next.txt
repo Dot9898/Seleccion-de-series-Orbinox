@@ -1,4 +1,5 @@
-
+acento duplex?
+-Filtrado -> Filtro de prensa
 -Agregar el PDF descargable
 
 ?-Usar set selected zone para todos los cambios de st selected zone y segment?
