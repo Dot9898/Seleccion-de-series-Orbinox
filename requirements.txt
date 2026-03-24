@@ -2,3 +2,6 @@ pillow
 streamlit
 st_clickable_images
 st_click_detector
+streamlit-screen-stats
+streamlit-browser-session-storage
+streamlit-local-storage
