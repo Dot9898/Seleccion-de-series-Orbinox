@@ -211,6 +211,14 @@ DIAGRAM_KEYS_TO_NAMES = {'mine_diagram': 'mine',
 
 
 
+FLUID_OPTIONS_MINE = {'Molienda': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
+                      'Hidrociclones': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
+                      'Flotación': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
+                      'Espesamiento': ['Concentrado de cobre', 'Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
+                      'Filtrado': ['Concentrado de cobre'], 
+                      'Relaves': [f'Relaves, menos de 50% sólidos', f'Relaves, más de 50% sólidos'], 
+                      '': [], 
+                      None: []}
 
 
 

@@ -6,32 +6,36 @@ from io import BytesIO
 import streamlit as st
 from st_clickable_images import clickable_images
 from st_click_detector import click_detector
+import st_screen_stats
 
 ROOT_PATH = Path(__file__).resolve().parent.parent
 IMG_PATH = ROOT_PATH / 'img'
 
 
-print('TK_act_ac2'.split('_')[1:])
+
+st.set_page_config(layout = 'centered')
+
+screen_data_object = st_screen_stats.ScreenData(setTimeout = 1000) #timeout = 5
+
+
+screen_data = screen_data_object.st_screen_data(on_change = None, 
+                                                default = None, 
+                                                key = 'screen_data_object', 
+                                                interval = 0.1)
+
+#screen_height = screen_data['screen']['height']
+screen_width = screen_data['screen']['width']
+if screen_width > 767.5:
+    pass #desktop
+else:
+    pass #mobile
 
 
 
 
 
-st.markdown(
-    """
-    <style>
 
-    div.stButton > button > div {
-        color: red !important;
-        background-color: yellow !important;
-    }
 
-    div.stButton > button:hover > div {
-        color: white !important;
-        background-color: darkred !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+
+
 

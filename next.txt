@@ -1,5 +1,8 @@
-acento duplex?
+
+
 -Filtrado -> Filtro de prensa
+Agregar HB filtro de prensa
+-acercar líneas disclaimer
 -Agregar el PDF descargable
 
 ?-Usar set selected zone para todos los cambios de st selected zone y segment?

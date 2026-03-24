@@ -30,15 +30,6 @@ LABEL_SPACING = 28
 EMPTY_STATE_PANEL_LOWER_SPACING = 20
 EMPTY_STATE_PANEL_UPPER_SPACING = EMPTY_STATE_PANEL_LOWER_SPACING + 15
 
-FLUID_OPTIONS_MINE = {'Molienda': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
-                      'Hidrociclones': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
-                      'Flotación': ['Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
-                      'Espesamiento': ['Concentrado de cobre', 'Pulpa con agua', 'Pulpa con agua de mar', 'Pulpa con trazas de hidrocarburos'], 
-                      'Filtrado': ['Concentrado de cobre'], 
-                      'Relaves': [f'Relaves, menos de 50% sólidos', f'Relaves, más de 50% sólidos'], 
-                      '': [], 
-                      None: []}
-
 
 
 #Utilities
@@ -53,6 +44,9 @@ def resize_image_by_expanding_height(image, target_ratio):
     new_height = int(width/target_ratio)
     image = image.resize((width, new_height), Image.LANCZOS)
     return(image)
+
+def write_justified_and_centered_text(text):
+    st.markdown(f"<p style='text-align: justify; text-align-last: center'>{text}</p>", unsafe_allow_html = True)
 
 def load_images():
     images = {}
@@ -545,18 +539,20 @@ def go_back():
     st.session_state['rerun'] = True
 
 
+
 #Frontend
 
 @st.dialog(EMPTY_SPACE, width = 'medium', on_dismiss = disable_disclaimer)
 def generate_disclaimer():
-    logo_column = st.columns([1, 1, 1,])[1]
+    logo_column = st.columns([1, 1, 1])[1]
     with logo_column:
         st.image(st.session_state['images']['logo'], width = 'stretch')
     st.write('')
-    st.write('La selección de Series Orbinox se ofrece exclusivamente como recomendación. '\
-             'Orbinox no garantiza precisión, conveniencia, ni durabilidad de las selecciones aquí descritas. '\
-             'Para más información, contactar con nuestro equipo de ingenieros.')
-
+    text = 'La selección de Series Orbinox se ofrece exclusivamente como recomendación. '\
+           'Orbinox no garantiza precisión, conveniencia, ni durabilidad de las selecciones aquí descritas. '\
+           'Para más información, contactar con nuestro equipo de ingenieros.'
+    write_justified_and_centered_text(text)
+    
 def generate_title():
     st.markdown(f"""
                 <div style="display: flex; flex-direction: column; justify-content: flex-end; height: {TITLE_HEIGHT}px;">
@@ -698,7 +694,7 @@ def generate_dropdowns_mine():
     
     with fluid_column:
         st.selectbox(':gray[Condición del fluido]', 
-                     FLUID_OPTIONS_MINE[st.session_state['selected_zone']], 
+                     constants_images.FLUID_OPTIONS_MINE[st.session_state['selected_zone']], 
                      index = None, 
                      label_visibility = 'visible', 
                      accept_new_options = False, 
@@ -914,7 +910,6 @@ selected_zone = st.session_state['selected_zone']
 
 set_style()
 st.set_page_config(layout = 'wide')
-
 
 if st.session_state['show_disclaimer']:
     generate_disclaimer()
