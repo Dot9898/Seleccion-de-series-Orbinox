@@ -619,7 +619,7 @@ def generate_super_zone_name(selected_segment, selected_zone):
     else:
         super_zone = ' '.join(selected_zone.split('-')[:-1])
     if super_zone == 'Filtrado':
-        super_zone == 'Filtro prensa'
+        super_zone = 'Filtro prensa'
 
     if selected_segment == 'mine':
         font_size = 1.7 #HACER CONSTANTES
