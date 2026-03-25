@@ -331,7 +331,7 @@ def valve_selection_mine(zone, pressure, fluid):
             return('WG 16')
         if fluid == f'Relaves, menos de 50% sólidos':
             return('VG 16')
-        if zone in ['Molienda', 'Espesamiento', 'Filtrado', 'Relaves']:
+        if zone in ['Molienda', 'Espesamiento', 'Filtro-prensa', 'Relaves']:
             return('WG 16')
         if zone in ['Hidrociclones', 'Flotación']:
             return('VG 16')
@@ -341,7 +341,7 @@ def valve_selection_mine(zone, pressure, fluid):
             return('WG')
         if fluid == f'Relaves, menos de 50% sólidos':
             return('VG')
-        if zone in ['Molienda', 'Espesamiento', 'Filtrado']:
+        if zone in ['Molienda', 'Espesamiento', 'Filtro-prensa']:
             return('WG')
         if zone in ['Hidrociclones', 'Flotación', 'Relaves']:
             return('VG')
@@ -589,8 +589,6 @@ def generate_super_zone_name(selected_segment, selected_zone):
         super_zone = selected_zone.replace('-', ' ')
     else:
         super_zone = ' '.join(selected_zone.split('-')[:-1])
-    if super_zone == 'Filtrado':
-        super_zone = 'Filtro prensa'
 
     if selected_segment == 'mine':
         font_size = 1.7 #HACER CONSTANTES
