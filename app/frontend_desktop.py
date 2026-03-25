@@ -358,6 +358,8 @@ def available_diameters_as_string(valve):
         return('2" a 36" in. / 50 a 900 mm')
     if valve_name in ['WG', 'HG']:
         return('3" a 36" in. / 75 a 900 mm')
+    if valve_name == 'HB':
+        return('3" a 24" in. / 80 a 600 mm')
     
     return(None)
 
@@ -687,7 +689,7 @@ def generate_dropdowns_mine():
     
     with pressure_column:
         st.selectbox(':gray[Presión máxima (bar)]', 
-                     [10, 16, 20, 50], 
+                     [10, 16, 20, 50] if st.session_state['selected_zone'] == 'Relaves' else [10], 
                      index = None, 
                      label_visibility = 'visible', 
                      accept_new_options = False, 
@@ -817,7 +819,10 @@ def print_selected_series_mine():
         valve_name = valve[:2]
         valve_link = constants_valves.VALVE_LINKS[valve_name]
         #st.subheader(zone)
-        st.markdown(f'Serie recomendada: [{valve}]({valve_link})')
+        if valve_name == 'HG' and pressure <= 20:
+            st.markdown(f'Serie recomendada: [{valve}]({valve_link}) o [HB {int(pressure)}]({constants_valves.VALVE_LINKS['HB']})')
+        else:
+            st.markdown(f'Serie recomendada: [{valve}]({valve_link})')
         st.write('Material de mangón:', mangon + '*' if mangon == 'Nitrilo' else mangon)
         st.write('Material de tajadera:', tajadera)
         if mangon == 'Nitrilo':
