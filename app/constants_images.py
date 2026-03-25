@@ -220,7 +220,14 @@ FLUID_OPTIONS_MINE = {'Molienda': ['Pulpa con agua', 'Pulpa con agua de mar', 'P
                       '': [], 
                       None: []}
 
-
+AVAILABLE_PRESSURES_MINE = {'Molienda': [10], 
+                            'Hidrociclones': [10], 
+                            'Flotación': [10], 
+                            'Espesamiento': [10], 
+                            'Filtro-prensa': [10, 16, 20], 
+                            'Relaves': [10, 16, 20, 50], 
+                            '': [], 
+                            None: []}
 
 
 

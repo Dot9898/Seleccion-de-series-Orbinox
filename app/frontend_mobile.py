@@ -712,7 +712,7 @@ def make_interactive_image(diagram_key):
 def generate_dropdowns_mine():
     
     st.selectbox(':gray[Presión máxima (bar)]', 
-                    [10, 16, 20, 50] if st.session_state['selected_zone'] == 'Relaves' else [10], 
+                    constants_images.AVAILABLE_PRESSURES_MINE[st.session_state['selected_zone']], 
                     index = None, 
                     label_visibility = 'visible', 
                     accept_new_options = False, 
