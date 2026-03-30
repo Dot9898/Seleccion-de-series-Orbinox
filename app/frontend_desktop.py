@@ -28,7 +28,7 @@ BACK_ARROW_HEIGHT = 40
 SELECTBOX_SPACING = 24
 LABEL_SPACING = 28
 EMPTY_STATE_PANEL_LOWER_SPACING = 20
-EMPTY_STATE_PANEL_UPPER_SPACING = EMPTY_STATE_PANEL_LOWER_SPACING + 15
+EMPTY_STATE_PANEL_UPPER_SPACING = EMPTY_STATE_PANEL_LOWER_SPACING + 5
 
 
 
@@ -69,7 +69,7 @@ def load_images():
         images[name + '_light'] = img_to_base64(Image.open(IMG_PATH / 'recycled_paper' / (name + '_light.webp')))
     
     images['virgin_paper_diagram'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'virgin_paper_diagram.webp'))
-    #images['virgin_paper_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'virgin_paper_diagram_light.webp'))
+    images['virgin_paper_diagram_light'] = img_to_base64(Image.open(IMG_PATH / 'segments' / 'virgin_paper_diagram_light.webp'))
     for name in ['coccion', 'cribado', 'deslignificacion', 'recuperacion']:
         images[name + '_dark'] = img_to_base64(Image.open(IMG_PATH / 'virgin_paper' / (name + '_dark.webp')))
         images[name + '_light'] = img_to_base64(Image.open(IMG_PATH / 'virgin_paper' / (name + '_light.webp')))
@@ -99,11 +99,13 @@ def select_diagram_key(selected_segment, selected_zone):
         elif selected_zone == 'Papel-reciclado':
             diagram_key = 'recycled_paper_diagram'
         
-        elif selected_zone in (constants_images.IMAGES_INFO['recycled_paper']['zones'] + 
-                               constants_images.IMAGES_INFO['virgin_paper']['zones']):
+        elif selected_zone in constants_images.SUPER_ZONES:
             diagram_name = constants_images.ZONE_TO_IMAGE_NAME[selected_zone]
             diagram_key = f'{diagram_name}_dark'
         
+        elif selected_zone == 'Tratamiento-de-aguas':
+            diagram_key = f'virgin_paper_diagram_light'
+
         else:
             super_zone = '-'.join(selected_zone.split('-')[:-1])
             super_zone_name = constants_images.ZONE_TO_IMAGE_NAME[super_zone]
@@ -138,6 +140,16 @@ def get_available_pressures(selected_zone):
     available_valves_string = constants_valves.ZONE_TO_AVAILABLE_VALVES_STRING[selected_zone]
     available_pressures = []
     valves = constants_valves.AVAILABLE_VALVES_STRING_TO_LIST[available_valves_string]
+
+    #Quick hardcode, have to generalize if bidirectional check is needed
+    if selected_zone == 'Tratamiento-de-aguas':
+        bidirectional = st.session_state['bidirectional_checkbox']
+        if bidirectional:
+            valves = ['BT']
+        else:
+            valves = ['EK']
+    #---------------------------------------------------------------
+
     for valve in valves:
         for valve_name_with_flags in constants_valves.VALVE_NAME_TO_NAMES_WITH_FLAGS[valve]:
             for max_pressure in constants_valves.VALVE_DIAMETERS_AND_PRESSURES[valve_name_with_flags].values():
@@ -153,6 +165,16 @@ def get_available_diameters(selected_zone, pressure):
     available_valves_string = constants_valves.ZONE_TO_AVAILABLE_VALVES_STRING[selected_zone]
     available_diameters = []
     valves = constants_valves.AVAILABLE_VALVES_STRING_TO_LIST[available_valves_string]
+    
+    #Quick hardcode, have to generalize if bidirectional check is needed
+    if selected_zone == 'Tratamiento-de-aguas':
+        bidirectional = st.session_state['bidirectional_checkbox']
+        if bidirectional:
+            valves = ['BT']
+        else:
+            valves = ['EK']
+    #---------------------------------------------------------------
+
     for valve in valves:
         for valve_name_with_flags in constants_valves.VALVE_NAME_TO_NAMES_WITH_FLAGS[valve]:
             for diameter, max_pressure in constants_valves.VALVE_DIAMETERS_AND_PRESSURES[valve_name_with_flags].items():
@@ -196,7 +218,12 @@ def get_acceptable_valve(valve, pressure, diameter):
             return(valve_name_with_flags)
     return(None)
 
-def valve_selection_paper(zone, pressure, diameter, solids_concentration = 0, off_seating_pressure = 0): #Returns valve name with flags
+def valve_selection_paper(zone, 
+                          pressure, 
+                          diameter, 
+                          solids_concentration = 0, 
+                          off_seating_pressure = 0, 
+                          bidirectional = False): #Returns valve name with flags
     
     available_valves_string = constants_valves.ZONE_TO_AVAILABLE_VALVES_STRING[zone]
     if available_valves_string is None or pressure is None or diameter is None:
@@ -313,6 +340,15 @@ def valve_selection_paper(zone, pressure, diameter, solids_concentration = 0, of
         valve_name_with_flags = get_acceptable_valve('TK', pressure, diameter)
         if valve_name_with_flags is not None:
             return(f'{valve_name_with_flags}_JT_CR')
+    
+    if available_valves_string == 'EK/BT':
+        bidirectional = st.session_state['bidirectional_checkbox']
+        if bidirectional:
+            valve_name_with_flags = get_acceptable_valve('BT', pressure, diameter)
+        else:
+            valve_name_with_flags = get_acceptable_valve('EK', pressure, diameter)
+        if valve_name_with_flags is not None:
+            return(valve_name_with_flags)
 
     return('No_valve_available')
 
@@ -584,8 +620,8 @@ def generate_super_zone_name(selected_segment, selected_zone):
         return()
 
     if selected_zone in (constants_images.IMAGES_INFO['mine']['zones'] + 
-                            constants_images.IMAGES_INFO['recycled_paper']['zones'] + 
-                            constants_images.IMAGES_INFO['virgin_paper']['zones']):
+                         constants_images.IMAGES_INFO['recycled_paper']['zones'] + 
+                         constants_images.IMAGES_INFO['virgin_paper']['zones']):
         super_zone = selected_zone.replace('-', ' ')
     else:
         super_zone = ' '.join(selected_zone.split('-')[:-1])
@@ -765,6 +801,14 @@ def generate_dropdowns_paper():
     
     return(double_spacing)
 
+def generate_bidirectional_checkbox(): #Generalizar con una lista de zonas que lo requieren y no, el if else en el frontend principal
+    key = f'bidirectional_checkbox'
+    st.checkbox('Válvula bidireccional', 
+                 key = key, 
+                 value = False, 
+                 label_visibility = 'visible', 
+                 help=None)
+
 def generate_go_back_button():
     back_arrow_img_b64 = st.session_state['images']['go_back']
     back_arrow_img = f'data:image/webp;base64,{back_arrow_img_b64}'
@@ -834,14 +878,14 @@ def print_selected_series_paper():
     
     zone = st.session_state['selected_zone']
     pressure = st.session_state['pressure']
-    if pressure == None or zone in ['Papel-reciclado', 'Papel-virgen', None] + constants_images.IMAGES_INFO['recycled_paper']['zones'] + constants_images.IMAGES_INFO['virgin_paper']['zones']:
+    if pressure == None or zone in ['Papel-reciclado', 'Papel-virgen', None] + constants_images.SUPER_ZONES:
         return(False)
     
     diameter = st.session_state['diameter']
     paper_zone = ' '.join(zone.split('-')[:-1])
     valve_name_with_flags = valve_selection_paper(zone, pressure, diameter)
     valve, valve_flags = separate_valve_name_and_flags(valve_name_with_flags)
-    
+
     if get_available_diameters(zone, pressure) == []:
         st.caption('La presión de trabajo es demasiado alta para las series usualmente recomendadas en esta zona.' + '  \n' + 'Para válvulas a medida consultar con nuestro equipo de ingenieros.')
         return(True)
@@ -854,6 +898,11 @@ def print_selected_series_paper():
         return(True)
 
     else:
+        #---------
+        if zone == 'Tratamiento-de-aguas':
+            add_vertical_spacing(SELECTBOX_SPACING)
+        #---------
+
         valve_link = constants_valves.VALVE_LINKS[valve]
         #st.subheader(paper_zone)
         if 'JT' not in valve_flags:
@@ -903,6 +952,7 @@ defaults['go_back'] = False
 defaults['rerun'] = False
 defaults['selected_zone'] = None
 defaults['show_disclaimer'] = True
+defaults['bidirectional_checkbox'] = False
 init_session_state(defaults)
 
 if st.session_state['go_back']:
@@ -966,9 +1016,19 @@ if selected_segment == 'paper':
                 if selected_zone in [None, 'Papel-reciclado', 'Papel-virgen']:
                     add_vertical_spacing(SELECTBOX_SPACING + LABEL_SPACING)
                     generate_empty_state_panel('Elegir sector de la planta')
-                elif selected_zone in (constants_images.IMAGES_INFO['recycled_paper']['zones'] + constants_images.IMAGES_INFO['virgin_paper']['zones']):
+                elif selected_zone in constants_images.SUPER_ZONES:
                     add_vertical_spacing(SELECTBOX_SPACING + LABEL_SPACING)
                     generate_empty_state_panel('Elegir zona y condiciones de trabajo', double_spacing)
+                elif selected_zone == 'Tratamiento-de-aguas':
+                    disclaimer_column, checkbox_column = st.columns([1, 1])
+                    with disclaimer_column:
+                        add_vertical_spacing(SELECTBOX_SPACING)
+                        st.caption('*Diámetros y presiones superiores bajo consulta')
+                    with checkbox_column:
+                        add_vertical_spacing(SELECTBOX_SPACING)
+                        generate_bidirectional_checkbox()
+                    add_vertical_spacing(LABEL_SPACING)
+                    generate_empty_state_panel('Elegir condiciones de trabajo', double_spacing = False)
                 else:
                     st.caption('*Diámetros y presiones superiores bajo consulta')
                     add_vertical_spacing(SELECTBOX_SPACING)

@@ -14,6 +14,7 @@ VALVE_LINKS = {
     'ET': 'https://www.orbinox.cl/productos-orbinox/valvulas-de-guillotina/valvula-de-guillotina-unidireccional-mss-sp-81',
     'DT': 'https://www.orbinox.cl/productos-orbinox/valvulas-de-guillotina/valvula-de-guillotina-de-doble-tajadera',
     'CR': 'https://www.orbinox.cl/productos-orbinox/valvulas-de-guillotina/valvula-de-guillotina-de-boca-redonda-y-cuadrada', 
+    'BT': 'https://www.orbinox.cl/productos-orbinox/valvulas-de-guillotina/valvula-de-guillotina-bidireccional-mss-sp-81', 
     'JT': 'https://youtu.be/P-PyAkLVSpQ?si=v7hZuDyuQDmZWPAm&t=135'}
 
 VALVE_DIAMETERS_AND_PRESSURES = {
@@ -33,7 +34,9 @@ VALVE_DIAMETERS_AND_PRESSURES = {
     'ET': {2: 10, 3: 10, 4: 10, 5: 10, 6: 10, 8: 10, 10: 10, 12: 10, 14: 10, 16: 10, 18: 10, 20: 10, 24: 10}, 
     'ET_actuator': {30: 7, 36: 7}, 
     'DT': {4: 10, 5: 10, 6: 10, 8: 10, 10: 10, 12: 6, 14: 6, 16: 6, 18: 5, 20: 4, 24: 4}, 
-    'CR': {4: 7, 6: 7, 8: 7, 10: 7, 12: 7, 16: 7, 20: 4, 24: 4}}
+    'CR': {4: 7, 6: 7, 8: 7, 10: 7, 12: 7, 16: 7, 20: 4, 24: 4}, 
+    'BT': {2: 10, 3: 10, 4: 10, 5: 10, 6: 10, 8: 10, 10: 10, 12: 10, 14: 10, 16: 10, 18: 10, 20: 10, 24: 10}, 
+    'BT_actuator': {30: 7, 36: 7}}
 
 VALVE_NAME_TO_NAMES_WITH_FLAGS = {'TL': ['TL', 'TL_neumatic'],   #El orden importa. Al revisar si una válvula sirve, el programa corre de la primera a la última, parando en la primera que sirve
                                   'TK': ['TK', 'TK_duplex', 'TK_actuator', 'TK_actuator_duplex'], 
@@ -44,7 +47,8 @@ VALVE_NAME_TO_NAMES_WITH_FLAGS = {'TL': ['TL', 'TL_neumatic'],   #El orden impor
                                   'EK': ['EK', 'EK_duplex', 'EK_electric'], 
                                   'ET': ['ET', 'ET_actuator'], 
                                   'DT': ['DT'], 
-                                  'CR': ['CR']}
+                                  'CR': ['CR'], 
+                                  'BT': ['BT', 'BT_actuator']}
 
 ZONE_TO_AVAILABLE_VALVES_STRING = {
 
@@ -111,7 +115,9 @@ ZONE_TO_AVAILABLE_VALVES_STRING = {
     'Recuperación-de-licor-3': 'EK/TK',
     'Recuperación-de-licor-4': 'EK/TK',
     'Recuperación-de-licor-5': 'EK/TK',
-    'Recuperación-de-licor-6': 'EX'}
+    'Recuperación-de-licor-6': 'EX', 
+    
+    'Tratamiento-de-aguas': 'EK/BT'}
 
 AVAILABLE_VALVES_STRING_TO_LIST = { #NO ESTÁN EN ORDEN DE MÁS DÉBIL A MÁS RESISTENTE
     None: [],
@@ -127,7 +133,8 @@ AVAILABLE_VALVES_STRING_TO_LIST = { #NO ESTÁN EN ORDEN DE MÁS DÉBIL A MÁS RE
     'DT/TL/TK/ET': ['DT', 'TL', 'TK', 'ET'],
     'JT/CR/DT': ['CR'],
     'JT/CR/CR': ['CR'],
-    'JT/TK/CR': ['TK']}
+    'JT/TK/CR': ['TK'], 
+    'EK/BT': ['EK', 'BT']}
 
 
 
