@@ -1,7 +1,6 @@
 
-
-preguntar filtro prensa vs filtro de prensa
-Agregar HB filtro de prensa
+cambiar wrapper zone relaves
+cambiar tamaño go back en mobile
 -acercar líneas disclaimer
 -Agregar el PDF descargable
 
