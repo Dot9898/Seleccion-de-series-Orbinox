@@ -357,20 +357,20 @@ def valve_selection_mine(zone, pressure, fluid):
         return(None)
 
     if pressure == 50:
-        return('HG 50')
+        return('HG (50 bar)')
     
     if pressure == 20:
-        return('HG 20')
+        return('HG (20 bar)')
     
     if pressure == 16:
         if fluid == f'Relaves, más de 50% sólidos':
-            return('WG 16')
+            return('HG (16 bar)')
         if fluid == f'Relaves, menos de 50% sólidos':
-            return('VG 16')
-        if zone in ['Molienda', 'Espesamiento', 'Filtro-prensa', 'Relaves']:
-            return('WG 16')
+            return('VG (16 bar)')
+        if zone in ['Molienda', 'Espesamiento', 'Filtro-prensa']:
+            return('WG (16 bar)')
         if zone in ['Hidrociclones', 'Flotación']:
-            return('VG 16')
+            return('VG (16 bar)')
         
     if pressure == 10:
         if fluid == f'Relaves, más de 50% sólidos':
@@ -858,11 +858,11 @@ def print_selected_series_mine():
         return(False)
     
     else:
-        valve_name = valve[:2]
+        valve_name = valve[0:2]
         valve_link = constants_valves.VALVE_LINKS[valve_name]
         #st.subheader(zone)
         if valve_name == 'HG' and pressure <= 20:
-            st.markdown(f'Serie recomendada: [{valve}]({valve_link}) o [HB {int(pressure)}]({constants_valves.VALVE_LINKS['HB']})')
+            st.markdown(f'Serie recomendada: [{valve}]({valve_link}) o [HB ({int(pressure)} bar)]({constants_valves.VALVE_LINKS['HB']})')
         else:
             st.markdown(f'Serie recomendada: [{valve}]({valve_link})')
         st.write('Material de mangón:', mangon + '*' if mangon == 'Nitrilo' else mangon)
