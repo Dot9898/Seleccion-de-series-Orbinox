@@ -865,10 +865,10 @@ def print_selected_series_mine():
             st.markdown(f'Serie recomendada: [{valve}]({valve_link}) o [HB ({int(pressure)} bar)]({constants_valves.VALVE_LINKS['HB']})')
         else:
             st.markdown(f'Serie recomendada: [{valve}]({valve_link})')
-        st.write('Material de mangón:', mangon + '*' if mangon == 'Nitrilo' else mangon)
+        st.write('Material de mangón:', mangon + ' *' if mangon == 'Nitrilo' else mangon)
         st.write('Material de tajadera:', tajadera)
         if mangon == 'Nitrilo':
-            st.caption('*Caucho natural para porcentajes pequeños de hidrocarburos')
+            st.caption('*Es posible utilizar caucho natural para porcentaje pequeños de hidrocarburos, 10 y 100 gramos por tonelada (g/t) de mineral.')
         st.write('')
         st.write('')
         st.caption('Diámetros disponibles: ' + diameters + '  \n' + '*DN superiores bajo consulta')
