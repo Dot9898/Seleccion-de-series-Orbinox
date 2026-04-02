@@ -15,7 +15,9 @@ VALVE_LINKS = {
     'DT': 'https://www.orbinox.cl/productos-orbinox/valvulas-de-guillotina/valvula-de-guillotina-de-doble-tajadera',
     'CR': 'https://www.orbinox.cl/productos-orbinox/valvulas-de-guillotina/valvula-de-guillotina-de-boca-redonda-y-cuadrada', 
     'BT': 'https://www.orbinox.cl/productos-orbinox/valvulas-de-guillotina/valvula-de-guillotina-bidireccional-mss-sp-81', 
-    'JT': 'https://youtu.be/P-PyAkLVSpQ?si=v7hZuDyuQDmZWPAm&t=135'}
+    'JT': 'https://youtu.be/P-PyAkLVSpQ?si=v7hZuDyuQDmZWPAm&t=135', 
+    'MU': 'https://www.orbinox.cl/productos-orbinox/compuertas/compuerta-mural', 
+    'CC': 'https://www.orbinox.cl/productos-orbinox/compuertas/compuerta-de-canal'}
 
 VALVE_DIAMETERS_AND_PRESSURES = {
     'TL': {2: 10, 2.5: 10, 3: 10, 4: 10, 5: 10, 6: 8, 8: 8, 10: 8, 12: 6, 14: 6, 16: 6, 18: 5, 20: 4, 24: 4}, 

@@ -863,6 +863,8 @@ def print_selected_series_mine():
         #st.subheader(zone)
         if valve_name == 'HG' and pressure <= 20:
             st.markdown(f'Serie recomendada: [{valve}]({valve_link}) o [HB ({int(pressure)} bar)]({constants_valves.VALVE_LINKS['HB']})')
+        elif zone == 'Hidrociclones' and valve_name == 'VG':
+            st.markdown(f'Serie recomendada: [{valve}]({valve_link}) o [WG]({constants_valves.VALVE_LINKS['WG']})')
         else:
             st.markdown(f'Serie recomendada: [{valve}]({valve_link})')
         st.write('Material de mangón:', mangon + ' *' if mangon == 'Nitrilo' else mangon)
@@ -912,6 +914,10 @@ def print_selected_series_paper():
             second_valve_link = constants_valves.VALVE_LINKS[second_valve]
             junk_trap_link = constants_valves.VALVE_LINKS['JT']
             st.markdown(f'Serie recomendada: [Junk trap]({junk_trap_link}) de series [{valve}]({valve_link}) con [{second_valve}]({second_valve_link})')
+        if zone == 'Tratamiento-de-aguas':
+            MU_link = constants_valves.VALVE_LINKS['MU']
+            CC_link = constants_valves.VALVE_LINKS['CC']
+            st.markdown(f'En esta zona, se recomienda el uso de compuertas [MU]({MU_link}) y [CC]({CC_link})')
         st.write('')
         st.write('')
         st.write('')
